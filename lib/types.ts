@@ -35,7 +35,19 @@ export interface InvoiceDetails {
   newBalance: number
 }
 
+export interface InvoiceHistoryEntry extends InvoiceDetails {
+  _id: string
+  createdAt: string
+}
+
 export interface InvoiceDocument extends InvoiceDetails {
   _id: string
   createdAt: string
+  edited?: boolean
+  // Chain pointers so an edited invoice can be traced back and forth.
+  previousInvoiceId?: string
+  replacedBy?: string
+  active?: boolean
+  // Full snapshots of every prior version of this invoice.
+  history?: InvoiceHistoryEntry[]
 }

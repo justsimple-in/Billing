@@ -21,8 +21,8 @@ const c = {
   white: "#ffffff",
 }
 
-const cell: React.CSSProperties = { padding: "8px" }
-const cellR: React.CSSProperties = { padding: "8px", textAlign: "right" }
+const cell: React.CSSProperties = { padding: "6px 5px" }
+const cellR: React.CSSProperties = { padding: "6px 5px", textAlign: "right" }
 
 /**
  * Printable invoice layout. Rendered on the /view/[id] page and captured for
@@ -40,10 +40,10 @@ export const InvoiceLayout = forwardRef<HTMLDivElement, Props>(
           width: "100%",
           maxWidth: "768px",
           background: c.white,
-          padding: "32px",
+          padding: "20px",
           color: c.ink,
           fontFamily: "var(--font-geist-sans, sans-serif)",
-          fontSize: "14px",
+          fontSize: "13px",
           lineHeight: 1.5,
         }}
       >
@@ -168,7 +168,7 @@ export const InvoiceLayout = forwardRef<HTMLDivElement, Props>(
             justifyContent: "flex-end",
           }}
         >
-          <div style={{ width: "256px" }}>
+          <div style={{ width: "100%", maxWidth: "256px" }}>
             <Row label="Subtotal" value={money(subtotal)} muted />
             <Row label="Previous Balance" value={money(invoice.balance)} muted />
             <div

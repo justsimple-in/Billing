@@ -2,7 +2,7 @@ import Link from "next/link"
 import { ObjectId } from "mongodb"
 import { ArrowLeft } from "lucide-react"
 import { getInvoicesCollection } from "@/lib/mongodb"
-import { InvoiceShare } from "@/components/invoice-share"
+import { InvoiceForm } from "@/components/invoice-form"
 import type { InvoiceDetails } from "@/lib/types"
 
 async function getInvoice(id: string): Promise<InvoiceDetails | null> {
@@ -26,12 +26,12 @@ async function getInvoice(id: string): Promise<InvoiceDetails | null> {
       newBalance: doc.newBalance,
     }
   } catch (err) {
-    console.error("[v0] Error loading invoice:", err)
+    console.error("[v0] Error loading invoice for edit:", err)
     return null
   }
 }
 
-export default async function ViewInvoicePage({
+export default async function EditInvoicePage({
   params,
 }: {
   params: Promise<{ id: string }>
@@ -56,21 +56,5 @@ export default async function ViewInvoicePage({
     )
   }
 
-  return (
-    <main className="mx-auto min-h-svh max-w-md px-4 py-6">
-      <div className="mb-4 flex items-center justify-between">
-        {/* <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" /> New Invoice
-        </Link> */}
-        {/* <span className="text-sm text-muted-foreground">
-          Invoice #{invoice.billNo}
-        </span> */}
-      </div>
-
-      <InvoiceShare invoice={invoice} invoiceId={id} />
-    </main>
-  )
+  return <InvoiceForm mode="edit" initial={invoice} editId={id} />
 }
