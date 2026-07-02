@@ -9,6 +9,14 @@ function money(n: number) {
   return `Rs ${Number(n || 0).toFixed(2)}`
 }
 
+function formatDate(date: string) {
+  const d = new Date(date);
+
+  if (isNaN(d.getTime())) return date;
+
+  return d.toLocaleDateString("en-GB");
+}
+
 // Inline hex colors are used throughout so html2canvas (which cannot parse the
 // oklch() colors emitted by Tailwind v4) can reliably rasterize the invoice.
 const c = {
@@ -48,50 +56,106 @@ export const InvoiceLayout = forwardRef<HTMLDivElement, Props>(
         }}
       >
         {/* Header */}
+        {/* Header */}
         <div
           style={{
             display: "flex",
-            alignItems: "flex-start",
             justifyContent: "space-between",
+            alignItems: "flex-start",
             borderBottom: `2px solid ${c.ink}`,
             paddingBottom: "16px",
           }}
         >
           <div>
-            <h1 style={{ fontSize: "24px", fontWeight: 700, margin: 0 }}>
-              INVOICE
+            <h1
+              style={{
+                margin: 0,
+                fontSize: "22px",
+                fontWeight: 700,
+              }}
+            >
+              Shree Balaji Fruits &amp; Vegetables
             </h1>
-            <p style={{ margin: "4px 0 0", fontSize: "13px", color: c.muted }}>
-              Billing Statement
+
+            <p
+              style={{
+                // margin: "6px 0 0",
+                fontSize: "13px",
+                color: c.muted,
+              }}
+            >
+              Contact: +91 9730419160
             </p>
           </div>
-          <div style={{ textAlign: "right", fontSize: "13px" }}>
-            <p style={{ margin: 0 }}>
+
+          {/* <div
+            style={{
+              textAlign: "right",
+              fontSize: "14px",
+              lineHeight: 1.7,
+            }}
+          >
+            <div>
               <strong>Bill No:</strong> {invoice.billNo}
-            </p>
-            <p style={{ margin: "2px 0 0" }}>
-              <strong>Date:</strong> {invoice.invoiceDate}
-            </p>
-          </div>
+            </div>
+
+            <div>
+              <strong>Date:</strong> {formatDate(invoice.invoiceDate)}
+            </div>
+          </div> */}
         </div>
 
         {/* Bill to */}
-        <div style={{ marginTop: "16px" }}>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "11px",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              color: c.muted,
-            }}
-          >
-            Billed To
-          </p>
-          <p style={{ margin: "2px 0 0", fontSize: "18px", fontWeight: 600 }}>
-            {invoice.clientName || "—"}
-          </p>
-        </div>
+        <div
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginTop: "16px",
+  }}
+>
+  {/* Left */}
+  <div>
+    <p
+      style={{
+        margin: 0,
+        fontSize: "10px",
+        textTransform: "uppercase",
+        letterSpacing: "0.12em",
+        color: c.muted,
+      }}
+    >
+      Billed To
+    </p>
+
+    <p
+      style={{
+        margin: "2px 0 0",
+        fontSize: "18px",
+        fontWeight: 600,
+      }}
+    >
+      {invoice.clientName || "—"}
+    </p>
+  </div>
+
+  {/* Right */}
+  <div
+    style={{
+      textAlign: "right",
+      fontSize: "14px",
+      lineHeight: 1.7,
+    }}
+  >
+    <div>
+      <strong>Bill No:</strong> {invoice.billNo}
+    </div>
+
+    <div>
+      <strong>Date:</strong> {formatDate(invoice.invoiceDate)}
+    </div>
+  </div>
+</div>
 
         {/* Items table */}
         <table
@@ -236,13 +300,17 @@ export const InvoiceLayout = forwardRef<HTMLDivElement, Props>(
 
         <p
           style={{
-            marginTop: "32px",
+            marginTop: "20px",
             textAlign: "center",
             fontSize: "12px",
             color: c.faint,
           }}
         >
           Thank you for your business
+          {/* <br />
+          <span style={{ fontWeight: 600 }}>
+            @justsimple.in
+          </span> */}
         </p>
       </div>
     )
