@@ -1,9 +1,24 @@
 import { NextResponse } from "next/server"
 import { getClientsCollection } from "@/lib/mongodb"
+import { getBusiness } from "@/lib/actions/getbusiness";
 
-// GET /api/clients -> list all clients
-export async function GET() {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
   try {
+  const { slug } = await params;
+
+  const business = await getBusiness(slug);
+
+  if (!business) {
+    return NextResponse.json(
+      { error: "Business not found" },
+      { status: 404 }
+    );
+  }
+
+
     const collection = await getClientsCollection()
     const clients = await collection.find({}).sort({ clientName: 1 }).toArray()
 
@@ -24,11 +39,26 @@ export async function GET() {
 }
 
 // POST /api/clients -> add a new client { clientName, prevBalance }
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+)
+ {
   try {
+    const { slug } = await params;
+
+  const business = await getBusiness(slug);
+
+  if (!business) {
+    return NextResponse.json(
+      { error: "Business not found" },
+      { status: 404 }
+    );
+  }
     const body = await request.json()
     const clientName = String(body.clientName || "").trim()
     const prevBalance = Number(body.prevBalance) || 0
+    
 
     if (!clientName) {
       return NextResponse.json(
@@ -41,8 +71,13 @@ export async function POST(request: Request) {
 
     // Avoid duplicates (case-insensitive)
     const existing = await collection.findOne({
-      clientName: { $regex: `^${escapeRegExp(clientName)}$`, $options: "i" },
-    })
+    businessId: business._id.toString(),
+
+    clientName: {
+        $regex: `^${escapeRegExp(clientName)}$`,
+        $options: "i",
+    },
+});
     if (existing) {
       return NextResponse.json({
         client: {
@@ -54,10 +89,14 @@ export async function POST(request: Request) {
     }
 
     const result = await collection.insertOne({
-      clientName,
-      prevBalance,
-      createdAt: new Date().toISOString(),
-    })
+    businessId: business._id.toString(),
+
+    clientName,
+
+    prevBalance,
+
+    createdAt: new Date().toISOString(),
+})
 
     return NextResponse.json({
       client: {

@@ -4,29 +4,30 @@ import { useSearchParams } from "next/navigation";
 
 import { useRef, useState } from "react"
 import Link from "next/link"
-import { Download, Send, Loader2, Pencil } from "lucide-react"
+import { Download, Send, Loader2, Pencil, Plus } from "lucide-react"
 import { InvoiceLayout } from "@/components/invoice-layout"
 import type { InvoiceDetails } from "@/lib/types"
 
 interface Props {
   invoice: InvoiceDetails
-  invoiceId: string
+  shareId: string
 }
 
-export function InvoiceShare({ invoice, invoiceId }: Props) {
+export function InvoiceShare({ invoice, shareId }: Props) {
   const printRef = useRef<HTMLDivElement>(null)
   const [generating, setGenerating] = useState(false)
 
-  const fileName = `invoice-${invoice.billNo || invoiceId}.png`
+  const fileName = `invoice-${invoice.billNo || shareId}.png`
   const searchParams = useSearchParams();
 
   const isOwner = searchParams.get("owner") === "true"; 
+  const slug = searchParams.get("slug") || "";
 
   const buildShareLink = () => {
     const base =
       process.env.NEXT_PUBLIC_BASE_URL ||
       (typeof window !== "undefined" ? window.location.origin : "")
-    return `${base}/view/${invoiceId}`
+    return `${base}/view/${shareId}`
   }
 
   // Render the invoice DOM to a PNG and trigger a download.
@@ -57,10 +58,11 @@ const generateImage = async () => {
       `Date: ${invoice.invoiceDate}\n` +
       `Total: Rs ${invoice.total.toFixed(2)}\n` +
       `New Balance: Rs ${invoice.newBalance.toFixed(2)}\n\n` +
-      `View invoice: ${link}\n\n` +
-      `(The invoice image has been downloaded to your device — attach it in the chat.)`
+      `View invoice: ${link}\n\n`
 
     const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
+    // console.log(message);
+    // console.log(waUrl);
     window.open(waUrl, "_blank")
   }
 
@@ -92,6 +94,15 @@ const generateImage = async () => {
       <Send className="h-4 w-4" />
       Share on WhatsApp
     </button>
+  )}
+  {isOwner && (
+    <Link
+          href={`/${slug}/bills/new`}
+          className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-white hover:bg-neutral-800"
+        >
+          <Plus className="h-4 w-4" />
+          New Bill
+        </Link>
   )}
 
 </div>

@@ -24,14 +24,16 @@ const emptyItem = (): Item => ({
 })
 
 interface Props {
-  mode: "create" | "edit"
-  /** Existing invoice data used to prefill the form in edit mode. */
-  initial?: InvoiceDetails
-  /** The _id of the invoice being edited (edit mode only). */
-  editId?: string
+  mode: "create" | "edit";
+
+  slug: string;
+
+  initial?: InvoiceDetails;
+
+  editId?: string;
 }
 
-export function InvoiceForm({ mode, initial, editId }: Props) {
+export function InvoiceForm({ mode, slug, initial, editId }: Props) {
   const router = useRouter()
 
   const [clients, setClients] = useState<Client[]>([])
@@ -66,7 +68,7 @@ export function InvoiceForm({ mode, initial, editId }: Props) {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const res = await fetch("/api/clients")
+        const res = await fetch(`/${slug}/api/clients`)
         const data = await res.json()
         setClients(data.clients || [])
       } catch (err) {
@@ -158,7 +160,7 @@ export function InvoiceForm({ mode, initial, editId }: Props) {
 
     try {
       const endpoint =
-        mode === "edit" ? `/api/invoices/${editId}` : "/api/invoices"
+        mode === "edit" ? `/${slug}/api/invoices/${editId}` : `/${slug}/api/invoices`
       const method = mode === "edit" ? "PUT" : "POST"
 
       const res = await fetch(endpoint, {
@@ -167,10 +169,10 @@ export function InvoiceForm({ mode, initial, editId }: Props) {
         body: JSON.stringify(payload),
       })
       const data = await res.json()
-      if (data.invoice?._id) {
-        router.push(`/view/${data.invoice._id}?owner=true`)
+      if (data.invoice?.shareId) {
+        router.push(`/view/${data.invoice.shareId}?owner=true&slug=${slug}`);
       } else {
-        throw new Error(data.error || "Unknown error")
+        throw new Error("shareId not returned from server");
       }
     } catch (err) {
       console.error("[v0] Error saving invoice:", err)
@@ -231,11 +233,12 @@ export function InvoiceForm({ mode, initial, editId }: Props) {
                 Client Name
               </label>
               <ClientCombobox
+                slug={slug}
                 clients={clients}
                 value={clientName}
                 onSelect={(c) => {
                   setClientName(c.clientName)
-                  setSelectedClientId(c._id)
+                  setSelectedClientId(c._id ?? "")
                   setBalance(c.prevBalance || 0)
                 }}
                 onClientAdded={(c) => setClients((prev) => [...prev, c])}
@@ -460,9 +463,8 @@ export function InvoiceForm({ mode, initial, editId }: Props) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label
-                className={`mb-1 block text-sm font-medium ${
-                  balance >= 0 ? "text-emerald-700" : "text-red-700"
-                }`}
+                className={`mb-1 block text-sm font-medium ${balance >= 0 ? "text-emerald-700" : "text-red-700"
+                  }`}
               >
                 Previous Balance
               </label>

@@ -1,32 +1,39 @@
 import Link from "next/link"
-import { ObjectId } from "mongodb"
+// import { ObjectId } from "mongodb"
 import { ArrowLeft } from "lucide-react"
 import { getInvoicesCollection } from "@/lib/mongodb"
 import { InvoiceForm } from "@/components/invoice-form"
 import type { InvoiceDetails } from "@/lib/types"
 
-async function getInvoice(id: string): Promise<InvoiceDetails | null> {
-  if (!ObjectId.isValid(id)) return null
+async function getInvoice( shareId: string): Promise<InvoiceDetails | null> {
+  // if (!ObjectId.isValid(id)) return null
   try {
     const invoices = await getInvoicesCollection()
-    const doc = await invoices.findOne({ _id: new ObjectId(id) })
+    const doc = await invoices.findOne({
+  shareId,
+  active: true,
+});
     if (!doc) return null
     return {
-      billNo: doc.billNo,
-      clientName: doc.clientName,
-      invoiceDate: doc.invoiceDate,
-      selectedClientId: doc.selectedClientId,
-      balance: doc.balance,
-      paid: doc.paid,
-      fare: doc.fare,
-      items: doc.items,
-      extra: doc.extra,
-      notes: doc.notes,
-      total: doc.total,
-      newBalance: doc.newBalance,
-    }
+  businessId: doc.businessId,
+  clientId: doc.clientId ?? doc.selectedClientId,
+  createdAt: doc.createdAt,
+
+  billNo: doc.billNo,
+  clientName: doc.clientName,
+  invoiceDate: doc.invoiceDate,
+  selectedClientId: doc.selectedClientId,
+  balance: doc.balance,
+  paid: doc.paid,
+  fare: doc.fare,
+  items: doc.items,
+  extra: doc.extra,
+  notes: doc.notes,
+  total: doc.total,
+  newBalance: doc.newBalance,
+};
   } catch (err) {
-    console.error("[v0] Error loading invoice for edit:", err)
+    console.error(" Error loading invoice for edit:", err)
     return null
   }
 }
@@ -34,10 +41,13 @@ async function getInvoice(id: string): Promise<InvoiceDetails | null> {
 export default async function EditInvoicePage({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{
+    slug: string;
+    shareId: string;
+  }>;
 }) {
-  const { id } = await params
-  const invoice = await getInvoice(id)
+const { slug, shareId } = await params;
+  const invoice = await getInvoice(shareId)
 
   if (!invoice) {
     return (
@@ -56,5 +66,12 @@ export default async function EditInvoicePage({
     )
   }
 
-  return <InvoiceForm mode="edit" initial={invoice} editId={id} />
+  return  (
+    <InvoiceForm
+      mode="edit"
+      slug={slug}
+      initial={invoice}
+      editId={shareId}
+    />
+  );
 }

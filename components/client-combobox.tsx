@@ -7,6 +7,7 @@ import type { Client } from "@/lib/types"
 interface Props {
   clients: Client[]
   value: string
+  slug: string
   onSelect: (client: Client) => void
   onClientAdded: (client: Client) => void
 }
@@ -14,6 +15,7 @@ interface Props {
 export function ClientCombobox({
   clients,
   value,
+  slug,
   onSelect,
   onClientAdded,
 }: Props) {
@@ -55,7 +57,7 @@ export function ClientCombobox({
     if (!name) return
     setAdding(true)
     try {
-      const res = await fetch("/api/clients", {
+      const res = await fetch(`/${slug}/api/clients`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
