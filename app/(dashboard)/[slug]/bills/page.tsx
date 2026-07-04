@@ -6,7 +6,7 @@ import { Eye, Pencil, Plus } from "lucide-react";
 async function getInvoices(slug: string) {
   const business = await getBusiness(slug);
 
-
+  // console.log(slug)
   if (!business) return [];
 
   const collection = await getInvoicesCollection();
@@ -127,7 +127,7 @@ export default async function BillsHistoryPage({
 
               {invoice.active ? (
                 <Link
-                  href={`/edit/${invoice.shareId}`}
+                  href={`/${slug}/edit/${invoice.shareId}`}
                   className="flex flex-1 items-center justify-center gap-1 rounded-md bg-black px-3 py-2 text-sm text-white hover:bg-neutral-800"
                 >
                   <Pencil className="h-4 w-4" />
@@ -197,7 +197,7 @@ export default async function BillsHistoryPage({
 
                     {invoice.active ? (
                       <Link
-                        href={`/edit/${invoice.shareId}`}
+                        href={`/${slug}/edit/${invoice.shareId}`}
                         className="inline-flex items-center gap-1 rounded-md bg-black px-3 py-1.5 text-sm text-white hover:bg-neutral-800"
                       >
                         <Pencil className="h-4 w-4" />

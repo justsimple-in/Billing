@@ -81,7 +81,7 @@ const generateImage = async () => {
     ) : (
       <Download className="h-4 w-4" />
     )}
-    Download Image
+    Download Bill
   </button>
 
   {isOwner && (
