@@ -34,7 +34,7 @@ export interface InvoiceDetails {
   businessId: string;
 
   clientId: string;
-
+  version: number;
   createdAt: string;
   billNo: number
   clientName: string

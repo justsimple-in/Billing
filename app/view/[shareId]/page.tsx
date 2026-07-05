@@ -18,7 +18,7 @@ async function getInvoice(shareId: string): Promise<InvoiceDetails | null> {
   businessId: doc.businessId,
   clientId: doc.clientId ?? doc.selectedClientId,
   createdAt: doc.createdAt,
-
+  version: doc.version ?? 1,
   billNo: doc.billNo,
   clientName: doc.clientName,
   invoiceDate: doc.invoiceDate,

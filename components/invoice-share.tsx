@@ -17,7 +17,7 @@ export function InvoiceShare({ invoice, shareId }: Props) {
   const printRef = useRef<HTMLDivElement>(null)
   const [generating, setGenerating] = useState(false)
 
-  const fileName = `invoice-${invoice.billNo || shareId}.png`
+  const fileName = `${invoice.billNo || shareId}-${invoice.clientName}-v${invoice.version}.png`
   const searchParams = useSearchParams();
 
   const isOwner = searchParams.get("owner") === "true"; 
@@ -53,12 +53,7 @@ const generateImage = async () => {
 
     const link = buildShareLink()
     const message =
-      `*Invoice #${invoice.billNo}*\n` +
-      `Client: ${invoice.clientName}\n` +
-      `Date: ${invoice.invoiceDate}\n` +
-      `Total: Rs ${invoice.total.toFixed(2)}\n` +
-      `New Balance: Rs ${invoice.newBalance.toFixed(2)}\n\n` +
-      `View invoice: ${link}\n\n`
+      `View invoice: ${invoice.invoiceDate} \n\n ${link}\n`
 
     const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
     // console.log(message);
