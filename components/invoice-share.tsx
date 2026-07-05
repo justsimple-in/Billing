@@ -53,7 +53,8 @@ const generateImage = async () => {
 
     const link = buildShareLink()
     const message =
-      `View invoice: ${invoice.invoiceDate} \n\n ${link}\n`
+      `Hi ${invoice.clientName}\n` +
+      `View Bill: ${invoice.invoiceDate} \n\n ${link}\n`
 
     const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
     // console.log(message);
