@@ -85,7 +85,7 @@ export const InvoiceLayout = forwardRef<HTMLDivElement, Props>(
                 color: c.muted,
               }}
             >
-              Contact: +91 9730419160
+              Pintu Gupta: +91 9730419160
             </p>
           </div>
 
