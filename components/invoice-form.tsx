@@ -11,15 +11,16 @@ import { useRouter } from "next/navigation"
 import { Plus, Trash2, Loader2, FileText, Save } from "lucide-react"
 import { ClientCombobox } from "@/components/client-combobox"
 import type { Client, Extra, Item, InvoiceDetails } from "@/lib/types"
+import { NumberInput } from "./number-format"
 
 const emptyItem = (): Item => ({
   description: "",
   comm: 0,
   fare: 0,
-  quantity: 1,
+  quantity: 0,
   price: 0,
   eachItemTotal: 0,
-  carat: 1,
+  carat: 0,
   perCarat: 0,
 })
 
@@ -210,10 +211,10 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
               <label className="mb-1 block text-sm font-medium text-neutral-700">
                 Bill No
               </label>
-              <input
-                type="number"
+              <NumberInput
+                // type="number"
                 value={billNo}
-                onChange={(e) => setBillNo(Number(e.target.value))}
+                onChange={(value) => setBillNo(value)}
                 className={inputCls}
               />
             </div>
@@ -302,12 +303,10 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
                           </span>
                         )}
                       </label>
-                      <input
-                        type="number"
+                      <NumberInput
+                        // type="number"
                         value={item.carat}
-                        onChange={(e) =>
-                          updateItem(index, "carat", Number(e.target.value))
-                        }
+                        onChange={(value) => updateItem(index, "carat", value)}
                         className={inputCls}
                       />
                     </div>
@@ -315,11 +314,11 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
                       <label className="mb-1 block text-xs text-neutral-500">
                         Quantity
                       </label>
-                      <input
-                        type="number"
+                      <NumberInput
+                        // type="number"
                         value={item.quantity}
                         onChange={(e) =>
-                          updateItem(index, "quantity", Number(e.target.value))
+                          updateItem(index, "quantity", e)
                         }
                         className={inputCls}
                       />
@@ -328,11 +327,11 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
                       <label className="mb-1 block text-xs text-neutral-500">
                         Price
                       </label>
-                      <input
-                        type="number"
+                      <NumberInput
+                        // type="number"
                         value={item.price}
                         onChange={(e) =>
-                          updateItem(index, "price", Number(e.target.value))
+                          updateItem(index, "price", e)
                         }
                         className={inputCls}
                       />
@@ -342,11 +341,11 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
                         <label className="mb-1 block text-xs text-neutral-500">
                           Commission
                         </label>
-                        <input
-                          type="number"
+                        <NumberInput
+                          // type="number"
                           value={item.comm}
                           onChange={(e) =>
-                            updateItem(index, "comm", Number(e.target.value))
+                            updateItem(index, "comm", e )
                           }
                           className={inputCls}
                         />
@@ -357,12 +356,12 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
                         <label className="mb-1 block text-xs text-neutral-500">
                           Fare
                         </label>
-                        <input
-                          type="number"
+                        <NumberInput
+                          // type="number"
                           value={item.fare}
                           onWheel={(e) => e.currentTarget.blur()}
                           onChange={(e) =>
-                            updateItem(index, "fare", Number(e.target.value))
+                            updateItem(index, "fare", e)
                           }
                           className={inputCls}
                         />
@@ -435,11 +434,11 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
                     <label className="mb-1 block text-xs text-neutral-500">
                       Amount
                     </label>
-                    <input
-                      type="number"
+                    <NumberInput
+                      // type="number"
                       value={ex.amount}
                       onChange={(e) =>
-                        updateExtra(index, "amount", Number(e.target.value))
+                        updateExtra(index, "amount", e)
                       }
                       className={inputCls}
                     />
@@ -463,15 +462,15 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label
-                className={`mb-1 block text-sm font-medium ${balance >= 0 ? "text-emerald-700" : "text-red-700"
+                className={`mb-1 block text-sm font-medium ${balance <= 0 ? "text-emerald-700" : "text-red-700"
                   }`}
               >
                 Previous Balance
               </label>
-              <input
-                type="number"
+              <NumberInput
+                // type="number"
                 value={balance}
-                onChange={(e) => setBalance(Number(e.target.value))}
+                onChange={(e) => setBalance(e)}
                 className={inputCls}
               />
             </div>
@@ -479,10 +478,10 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
               <label className="mb-1 block text-sm font-medium text-emerald-700">
                 Paid Amount
               </label>
-              <input
-                type="number"
+              <NumberInput
+                // type="number"
                 value={paid}
-                onChange={(e) => setPaid(Number(e.target.value))}
+                onChange={(e) => setPaid(e)}
                 className={inputCls}
               />
             </div>

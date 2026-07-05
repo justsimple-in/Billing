@@ -17,7 +17,7 @@ export function InvoiceShare({ invoice, shareId }: Props) {
   const printRef = useRef<HTMLDivElement>(null)
   const [generating, setGenerating] = useState(false)
 
-  const fileName = `${invoice.billNo || shareId}-${invoice.clientName}-v${invoice.version}.png`
+  const fileName = `${invoice.billNo || shareId}-${invoice.clientName}-v${invoice.version}`
   const searchParams = useSearchParams();
 
   const isOwner = searchParams.get("owner") === "true"; 
