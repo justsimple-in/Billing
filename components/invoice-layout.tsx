@@ -85,7 +85,16 @@ export const InvoiceLayout = forwardRef<HTMLDivElement, Props>(
                 color: c.muted,
               }}
             >
-              Pintu Gupta: +91 9730419160
+              Pintu Gupta (Proprietor): +91 9730419160
+            </p>
+            <p
+              style={{
+                // margin: "6px 0 0",
+                fontSize: "13px",
+                color: c.muted,
+              }}
+            >
+              Sundaram (Chhota Balaji) : +91 8329195032
             </p>
           </div>
 
