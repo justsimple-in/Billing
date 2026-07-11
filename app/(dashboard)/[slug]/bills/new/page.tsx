@@ -11,7 +11,7 @@ export default async function CreateInvoicePage({
 }: Props) {
   const { slug } = await params;
 
-  console.log("CreateInvoicePage slug:", slug);
+  // console.log("CreateInvoicePage slug:", slug);
 
   return (
     <InvoiceForm

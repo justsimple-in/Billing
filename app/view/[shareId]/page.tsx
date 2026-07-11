@@ -48,9 +48,9 @@ export default async function ViewInvoicePage({
   const { shareId } = await params
   const invoice = await getInvoice(shareId)
 
-  console.log(shareId);
+  // console.log(shareId);
 
-  console.log(invoice);
+  // console.log(invoice);
 
   if (!invoice) {
     return (
