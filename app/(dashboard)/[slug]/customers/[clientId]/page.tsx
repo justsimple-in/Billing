@@ -49,7 +49,7 @@ const bills = await invoices
   })
   .toArray();
 
-  console.log("bills", bills);
+  // console.log("bills", bills);
 
   return (
     <main className="mx-auto max-w-5xl p-8 text-black">

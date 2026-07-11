@@ -15,13 +15,13 @@ export default async function CustomersPage({ params }: Props) {
   const { slug } = await params;
 
   const business = await getBusiness(slug);
-  console.log("business", business);
+  // console.log("business", business);
   if (!business) {
     notFound();
   }
 
   const clients = await getClientsCollection();
-  console.log("clients", clients);
+  // console.log("clients", clients);
   const allClients = await clients
     .find({
       businessId: business._id.toString(),

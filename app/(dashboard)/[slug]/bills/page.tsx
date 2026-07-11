@@ -20,7 +20,7 @@ async function getInvoices(slug: string) {
   })
   .toArray();
 
-    console.log("Invoices fetched for slug:", slug, "Count:", invoices.length);
+    // console.log("Invoices fetched for slug:", slug, "Count:", invoices.length);
 
   return invoices.map((i) => ({
     _id: i._id.toString(),
