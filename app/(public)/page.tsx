@@ -40,7 +40,7 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="mx-auto flex max-w-7xl flex-col items-center px-6 py-24 text-center">
-        <span className="rounded-full border bg-neutral-50 px-4 py-1 text-sm font-medium">
+        <span className="rounded-full border text-black bg-neutral-50 px-4 py-1 text-sm font-medium">
           🚀 Simple Billing Software
         </span>
 
@@ -50,7 +50,7 @@ export default function HomePage() {
           for Small Businesses
         </h1>
 
-        <p className="mt-6 max-w-2xl text-lg text-neutral-600">
+        <p className="mt-6 max-w-2xl text-lg text-neutral-200">
           Create invoices, manage customers, track balances and grow your
           business with JustSimple Billing.
         </p>
@@ -74,7 +74,7 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-6xl px-6 pb-24">
+      {/* <section className="mx-auto max-w-6xl px-6 pb-24">
         <h2 className="mb-10 text-center text-3xl font-bold">
           Everything you need to run your business
         </h2>
@@ -95,7 +95,7 @@ export default function HomePage() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* CTA */}
       <section className="border-t bg-neutral-50">
@@ -119,7 +119,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-neutral-500 md:flex-row">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-neutral-200 md:flex-row">
           <p>© {new Date().getFullYear()} JustSimple Billing</p>
 
           <div className="flex gap-6">
