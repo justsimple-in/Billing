@@ -4,6 +4,59 @@ import { ArrowLeft } from "lucide-react"
 import { getInvoicesCollection } from "@/lib/mongodb"
 import { InvoiceShare } from "@/components/invoice-share"
 import type { InvoiceDetails } from "@/lib/types"
+import type { Metadata } from "next";
+
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{
+    shareId: string;
+  }>;
+}): Promise<Metadata> {
+  const { shareId } = await params;
+
+  const invoice = await getInvoice(shareId);
+
+  if (!invoice) {
+    return {
+      title: "Invoice not found",
+      description: "This invoice may have been removed or the link is invalid.",
+    };
+  }
+
+  return {
+    title: `Bill No: ${invoice.billNo}`,
+    description: [
+      `Client: ${invoice.clientName}`,
+      `Date: ${invoice.invoiceDate}`,
+      `Balance Due: ₹${invoice.newBalance.toLocaleString()}`
+    ].join("\n"),
+
+    openGraph: {
+      title: `Bill No: ${invoice.billNo}`,
+      description: [
+        `Client: ${invoice.clientName}`,
+        `Date: ${invoice.invoiceDate}`,
+        `Balance Due: ₹${invoice.newBalance.toLocaleString()}`,
+      ].join("\n"),
+
+      url: `https://billing.justsimple.in/view/${shareId}`,
+      siteName: "billing.justsimple.in",
+      type: "website",
+    },
+
+    twitter: {
+      card: "summary",
+      title: `Bill No: ${invoice.billNo}`,
+      description: [
+        `Client: ${invoice.clientName}`,
+        `Date: ${invoice.invoiceDate}`,
+        `Balance Due: ₹${invoice.newBalance.toLocaleString()}`,
+      ].join("\n"),
+    },
+  };
+}
 
 async function getInvoice(shareId: string): Promise<InvoiceDetails | null> {
   // if (!ObjectId.isValid(id)) return null
