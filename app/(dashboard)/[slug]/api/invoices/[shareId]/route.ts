@@ -85,6 +85,7 @@ export async function PUT(
   billNo: original.billNo,
   clientName: original.clientName,
   selectedClientId: original.selectedClientId,
+  version: original.version ?? 1,
   invoiceDate: original.invoiceDate,
   balance: original.balance,
   paid: original.paid,
