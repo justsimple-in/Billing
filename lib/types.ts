@@ -144,3 +144,102 @@ export interface InvoiceDocument extends InvoiceDetails {
 
   updatedAt?: string;
 }
+
+export interface Supplier {
+  _id: string;
+
+  businessId: string;
+
+  supplierName: string;
+
+  prevBalance: number;
+
+  address?: string;
+
+  phone?: string;
+}
+
+export interface PurchaseItem {
+  description: string;
+
+  quantity: number;
+
+  unit: string;
+
+  weightPerUnit: number;
+
+  pricePerKg: number;
+
+  itemTotal: number;
+
+  comm: number;
+
+  fare: number;
+}
+
+export interface PurchaseReceipt {
+  businessId: string;
+
+  // supplierId: string;
+
+  version: number;
+
+  createdAt: string;
+
+  supplierName: string;
+
+  receiptDate: string;
+
+  selectedSupplierId: string;
+
+  // balance: number;
+
+  // paid: number;
+
+  fare: boolean;
+
+  items: PurchaseItem[];
+
+  extra: Extra[];
+
+  notes: string;
+
+  total: number;
+
+  // newBalance: number;
+}
+
+export interface PurchaseHistoryEntry extends PurchaseReceipt {
+  _id: string;
+
+  createdAt: string;
+}
+
+export interface PurchaseReceiptDocument extends PurchaseReceipt {
+  _id: string;
+
+  shareId: string;
+
+  receiptGroupId: string;
+
+  version: number;
+
+  active: boolean;
+
+  edited?: boolean;
+
+  previousReceiptId?: string;
+
+  replacedBy?: string;
+
+  history?: PurchaseHistoryEntry[];
+
+  updatedAt?: string;
+}
+
+export type PurchaseUnit =
+  | "Carat"
+  | "Box"
+  | "Bag"
+  | "Piece"
+  | "Kg";
