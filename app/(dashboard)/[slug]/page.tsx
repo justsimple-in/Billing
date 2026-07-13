@@ -7,6 +7,7 @@ import {
   Building2,
   Phone,
   MapPin,
+  Leaf,
   User,
 } from "lucide-react";
 
@@ -166,6 +167,34 @@ const owner = await users.findOne({
 
           <p className="mt-2 text-sm text-black">
             Manage customers.
+          </p>
+        </Link>
+        <Link
+          href={`/${slug}/suppliers`}
+          className="rounded-2xl border bg-white p-6 shadow-sm transition hover:border-blue-500 hover:shadow"
+        >
+          <Leaf className="mb-3 h-8 w-8 text-purple-600" />
+
+          <h3 className="font-semibold  text-black ">
+            Shetkari
+          </h3>
+
+          <p className="mt-2 text-sm text-black">
+            View all suppliers.
+          </p>
+        </Link>
+        <Link
+          href={`/${slug}/purchase/new`}
+          className="rounded-2xl border bg-white p-6 shadow-sm transition hover:border-blue-500 hover:shadow"
+        >
+          <Leaf className="mb-3 h-8 w-8 text-purple-600" />
+
+          <h3 className="font-semibold  text-black ">
+            Purchase Receipt
+          </h3>
+
+          <p className="mt-2 text-sm text-black">
+            Create a new purchase receipt.
           </p>
         </Link>
 

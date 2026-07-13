@@ -148,50 +148,61 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
   // }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!supplierName) {
-      alert("Please select or add a supplier.")
-      return
-    }
-    setSubmitting(true)
+  e.preventDefault()
 
-    const payload = {
-      // billNo,
-      supplierName,
-      selectedsupplierId,
-      receiptDate,
-      // balance,
-      // paid,
-      fare,
-      items: computedItems,
-      extra,
-      notes,
-      total,
-      newBalance,
-    }
-
-    try {
-      const endpoint =
-        mode === "edit" ? `/${slug}/api/invoices/${editId}` : `/${slug}/api/invoices`
-      const method = mode === "edit" ? "PUT" : "POST"
-
-      const res = await fetch(endpoint, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-      const data = await res.json()
-      if (data.invoice?.shareId) {
-        router.push(`/view/${data.invoice.shareId}?owner=true&slug=${slug}`);
-      } else {
-        throw new Error("shareId not returned from server");
-      }
-    } catch (err) {
-      console.error("[v0] Error saving invoice:", err)
-      alert("Failed to save invoice. Please try again.")
-      setSubmitting(false)
-    }
+  if (!supplierName) {
+    alert("Please select or add a supplier.")
+    return
   }
+
+  setSubmitting(true)
+
+  const payload = {
+    supplierName,
+    selectedSupplierId: selectedsupplierId,
+    receiptDate,
+    fare,
+    items: computedItems,
+    extra,
+    notes,
+    total,
+    newBalance,
+  }
+
+  try {
+    const endpoint =
+      mode === "edit"
+        ? `/${slug}/api/purchase/${editId}`
+        : `/${slug}/api/purchase`
+
+    const method = mode === "edit" ? "PUT" : "POST"
+
+    const res = await fetch(endpoint, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to save purchase receipt")
+    }
+
+    if (data.receipt?.shareId) {
+      router.push(`/${slug}/purchase/${data.receipt.shareId}`)
+    } else {
+      throw new Error("shareId not returned from server")
+    }
+  } catch (err) {
+    console.error("[Purchase] Error saving receipt:", err)
+    alert("Failed to save purchase receipt. Please try again.")
+  } finally {
+    setSubmitting(false)
+  }
+}
 
   const inputCls =
     "w-full rounded-md border border-neutral-300 bg-white p-2 text-neutral-900 outline-none focus:border-neutral-900"
