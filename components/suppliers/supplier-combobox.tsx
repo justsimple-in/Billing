@@ -130,7 +130,7 @@ export function SupplierCombobox({
                   {s.supplierName}
                 </span>
 
-                <span
+                {/* <span
                   className={
                     s.prevBalance >= 0
                       ? "text-emerald-600"
@@ -138,7 +138,7 @@ export function SupplierCombobox({
                   }
                 >
                   Rs {s.prevBalance}
-                </span>
+                </span> */}
               </button>
             ))}
 
@@ -162,7 +162,7 @@ export function SupplierCombobox({
           {showAddForm && (
             <div className="border-t border-neutral-200 p-3">
               <p className="mb-2 text-sm font-medium text-neutral-800">
-                Add {query.trim()}
+                Add <strong> {query.trim()}</strong>
               </p>
 
               {/* <label className="mb-1 block text-xs text-neutral-500">

@@ -162,9 +162,11 @@ export interface Supplier {
 export interface PurchaseItem {
   description: string;
 
-  quantity: number;
+  // quantity: number;
 
   unit: string;
+
+  unitCount: number;   
 
   weightPerUnit: number;
 
