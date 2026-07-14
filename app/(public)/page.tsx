@@ -23,7 +23,7 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="rounded-lg border px-4 py-2 text-sm font-medium transition hover:bg-neutral-100"
+              className="rounded-lg border px-4 py-2 text-sm font-medium transition hover:bg-neutral-100 hover:text-black"
             >
               Login
             </Link>
@@ -66,7 +66,7 @@ export default function HomePage() {
 
           <Link
             href="/login"
-            className="rounded-xl border px-6 py-3 font-medium transition hover:bg-neutral-100"
+            className="rounded-xl border px-6 py-3 font-medium transition hover:bg-neutral-100 hover:text-black"
           >
             Login
           </Link>

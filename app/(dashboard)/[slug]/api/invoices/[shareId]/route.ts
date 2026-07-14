@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { ObjectId } from "mongodb"
 import { getInvoicesCollection, getClientsCollection } from "@/lib/mongodb"
 import type { InvoiceHistoryEntry } from "@/lib/types"
+import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
 
 // GET /api/invoices/[id] -> fetch a single invoice
 export async function GET(
@@ -15,6 +16,14 @@ export async function GET(
 ) {
   try {
     const { shareId , slug } = await params;
+    const business = await getAuthorizedBusiness(slug);
+
+if (!business) {
+    return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 403 }
+    );
+}
 
     // if (!ObjectId.isValid(id)) {
     //   return NextResponse.json({ error: "Invalid invoice id" }, { status: 400 })
@@ -48,11 +57,18 @@ export async function GET(
 // original. The original is marked inactive and points forward to the new one.
 export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ shareId: string }> }
+  { params }: { params: Promise<{ shareId: string , slug: string; }> }
 ) {
   try {
-    const { shareId } = await params;
+    const { shareId , slug } = await params;
+    const business = await getAuthorizedBusiness(slug);
 
+if (!business) {
+    return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 403 }
+    );
+}
     // if (!ObjectId.isValid(id)) {
     //   return NextResponse.json({ error: "Invalid invoice id" }, { status: 400 })
     // }

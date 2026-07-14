@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getClientsCollection } from "@/lib/mongodb"
-import { getBusiness } from "@/lib/actions/getbusiness";
+import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
 
 export async function GET(
   request: Request,
@@ -8,14 +8,14 @@ export async function GET(
 ) {
   const { slug } = await params;
 
-  const business = await getBusiness(slug);
+  const business = await getAuthorizedBusiness(slug);
 
-  if (!business) {
+if (!business) {
     return NextResponse.json(
-      { error: "Business not found" },
-      { status: 404 }
+        { error: "Unauthorized" },
+        { status: 403 }
     );
-  }
+}
 
   const collection = await getClientsCollection();
 
@@ -44,14 +44,14 @@ export async function POST(  request: Request,
 
     const { slug } = await params;
 
-  const business = await getBusiness(slug);
+  const business = await getAuthorizedBusiness(slug);
 
-  if (!business) {
+if (!business) {
     return NextResponse.json(
-      { error: "Business not found" },
-      { status: 404 }
+        { error: "Unauthorized" },
+        { status: 403 }
     );
-  }
+}
     const body = await request.json()
     const clientName = String(body.clientName || "").trim()
     const prevBalance = Number(body.prevBalance) || 0

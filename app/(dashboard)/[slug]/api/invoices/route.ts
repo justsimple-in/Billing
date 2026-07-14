@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb"
 import { getInvoicesCollection, getClientsCollection } from "@/lib/mongodb"
 import { nanoid } from "nanoid";
 import { getBusiness } from "@/lib/actions/getbusiness";
+import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
 // POST /api/invoices -> create a new invoice
 export async function POST(
   request: Request,
@@ -14,13 +15,13 @@ export async function POST(
 
     const { slug } = await params;
 
-const business = await getBusiness(slug);
+const business = await getAuthorizedBusiness(slug);
 
 if (!business) {
-  return NextResponse.json(
-    { error: "Business not found" },
-    { status: 404 }
-  );
+    return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 403 }
+    );
 }
     const body = await request.json()
     const shareId = nanoid(16);
