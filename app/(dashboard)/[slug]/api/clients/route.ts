@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { getClientsCollection } from "@/lib/mongodb"
-import { getBusiness } from "@/lib/actions/getbusiness";
 import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
 
 export async function GET(

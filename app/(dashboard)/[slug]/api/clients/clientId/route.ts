@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 
-import { getBusiness } from "@/lib/actions/getbusiness";
 import { getClientsCollection } from "@/lib/collections/clients";
+import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
 
 interface Props {
   params: Promise<{
@@ -17,14 +17,14 @@ export async function GET(
 ) {
   const { slug, clientId } = await params;
 
-  const business = await getBusiness(slug);
+  const business = await getAuthorizedBusiness(slug);
 
-  if (!business) {
+if (!business) {
     return NextResponse.json(
-      { error: "Business not found" },
-      { status: 404 }
+        { error: "Unauthorized" },
+        { status: 403 }
     );
-  }
+}
 
   const collection = await getClientsCollection();
 
