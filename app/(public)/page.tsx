@@ -122,7 +122,18 @@ export default function HomePage() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-neutral-200 md:flex-row">
           <p>© {new Date().getFullYear()} JustSimple Billing</p>
 
+          <p className="mt-1">
+              Need help?{" "}
+              <a
+                href="mailto:justsimple.in@gmail.com"
+                className="text-blue-400 hover:text-blue-300"
+              >
+                justsimple.in@gmail.com
+              </a>
+            </p>
+
           <div className="flex gap-6">
+            
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
           </div>
