@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Plus, User } from "lucide-react";
+import { Plus, Truck } from "lucide-react";
 
 import { getBusiness } from "@/lib/actions/getbusiness";
-import { getClientsCollection } from "@/lib/collections/clients";
+import { getSuppliersCollection } from "@/lib/collections/suppliers";
 
 interface Props {
   params: Promise<{
@@ -11,73 +11,70 @@ interface Props {
   }>;
 }
 
-export default async function CustomersPage({ params }: Props) {
+export default async function SuppliersPage({ params }: Props) {
   const { slug } = await params;
 
   const business = await getBusiness(slug);
-  // console.log("business", business);
+
   if (!business) {
     notFound();
   }
 
-  const clients = await getClientsCollection();
-  // console.log("clients", clients);
-  const allClients = await clients
+  const suppliers = await getSuppliersCollection();
+
+  const allSuppliers = await suppliers
     .find({
       businessId: business._id.toString(),
     })
     .sort({
-      clientName: 1,
+      supplierName: 1,
     })
     .toArray();
 
   return (
     <main className="mx-auto max-w-5xl p-8">
       <div className="mb-8 flex items-center justify-between">
-
         <div>
           <h1 className="text-3xl font-bold text-white">
-            Customers
+            Suppliers
           </h1>
 
           <p className="mt-2 text-neutral-500">
-            Manage all your customers.
+            Manage all your suppliers.
           </p>
         </div>
 
         <Link
-          href={`/${slug}/customers/`}
+          href={`/${slug}/suppliers/`}
           className="flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-white hover:bg-neutral-800"
         >
           <Plus size={18} />
-          Add Customer
+          Add Supplier
         </Link>
-
       </div>
 
       <div className="overflow-hidden rounded-xl border bg-white">
-
-        {allClients.map((client) => (
+        {allSuppliers.map((supplier) => (
           <Link
-            key={client._id.toString()}
-            href={`/${slug}/customers/${client._id}`}
+            key={supplier._id.toString()}
+            href={`/${slug}/suppliers/${supplier._id}`}
             className="flex items-center justify-between border-b p-5 transition hover:bg-neutral-50 last:border-b-0"
           >
             <div className="flex items-center gap-3">
-              <User className="text-blue-600" />
+              <Truck className="text-green-600" />
 
               <div>
                 <p className="font-medium text-black">
-                  {client.clientName}
+                  {supplier.supplierName}
                 </p>
 
-                {/* Last bill date will go here later */}
+                {/* Last purchase date can go here later */}
               </div>
             </div>
 
             <div className="text-right">
               <p className="font-semibold text-black">
-                ₹{client.prevBalance.toLocaleString()}
+                .....
               </p>
 
               <p className="text-sm text-neutral-500">
@@ -87,12 +84,11 @@ export default async function CustomersPage({ params }: Props) {
           </Link>
         ))}
 
-        {allClients.length === 0 && (
+        {allSuppliers.length === 0 && (
           <div className="p-12 text-center text-neutral-500">
-            No customers yet.
+            No suppliers yet.
           </div>
         )}
-
       </div>
     </main>
   );
