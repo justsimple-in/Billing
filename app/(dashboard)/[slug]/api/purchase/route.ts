@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 
-import { getBusiness } from "@/lib/actions/getbusiness";
 import { getPurchaseReceiptsCollection } from "@/lib/collections/purchaseReceipt";
+import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
 
 // POST /[slug]/api/purchase
 export async function POST(
@@ -12,13 +12,13 @@ export async function POST(
   try {
     const { slug } = await params;
 
-    const business = await getBusiness(slug);
-
+    const business = await getAuthorizedBusiness(slug);
+    
     if (!business) {
-      return NextResponse.json(
-        { error: "Business not found" },
-        { status: 404 }
-      );
+        return NextResponse.json(
+            { error: "Unauthorized" },
+            { status: 403 }
+        );
     }
 
     const body = await request.json();

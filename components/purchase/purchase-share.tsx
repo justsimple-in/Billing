@@ -18,7 +18,7 @@ export function PurchaseShare({ invoice, shareId }: Props) {
   const printRef = useRef<HTMLDivElement>(null)
   const [generating, setGenerating] = useState(false)
 
-  const fileName = `Rec-${invoice.supplierName}-v${invoice.version}`
+  const fileName = `Rec-${invoice.supplierName}-v${invoice.version}-${invoice.receiptDate}`
   const searchParams = useSearchParams();
 
   const isOwner = searchParams.get("owner") === "true"; 
@@ -28,7 +28,7 @@ export function PurchaseShare({ invoice, shareId }: Props) {
     const base =
       process.env.NEXT_PUBLIC_BASE_URL ||
       (typeof window !== "undefined" ? window.location.origin : "")
-    return `${base}/view/${shareId}`
+    return `${base}/view/receipt/${shareId}`
   }
 
   // Render the invoice DOM to a PNG and trigger a download.
@@ -94,11 +94,11 @@ const generateImage = async () => {
   )}
   {isOwner && (
     <Link
-          href={`/${slug}/bills/new`}
+          href={`/${slug}/purchase/new`}
           className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-white hover:bg-neutral-800"
         >
           <Plus className="h-4 w-4" />
-          New Bill
+          New Receipt
         </Link>
   )}
 

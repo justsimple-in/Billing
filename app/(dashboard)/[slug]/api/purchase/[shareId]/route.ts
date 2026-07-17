@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPurchaseReceiptsCollection } from "@/lib/collections/purchaseReceipt";
 import type { PurchaseHistoryEntry } from "@/lib/types";
+import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
 
 // GET /[slug]/api/purchase/[shareId]
 export async function GET(
@@ -15,7 +16,16 @@ export async function GET(
   }
 ) {
   try {
-    const { shareId } = await params;
+    const { shareId , slug} = await params;
+
+    const business = await getAuthorizedBusiness(slug);
+    
+    if (!business) {
+        return NextResponse.json(
+            { error: "Unauthorized" },
+            { status: 403 }
+        );
+    }
 
     const receipts = await getPurchaseReceiptsCollection();
 
@@ -62,12 +72,22 @@ export async function PUT(
     params,
   }: {
     params: Promise<{
+      slug: string;
       shareId: string;
     }>;
   }
 ) {
   try {
-    const { shareId } = await params;
+    const { shareId , slug} = await params;
+
+    const business = await getAuthorizedBusiness(slug);
+
+if (!business) {
+    return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 403 }
+    );
+}
 
     const body = await request.json();
 

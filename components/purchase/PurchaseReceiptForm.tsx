@@ -92,7 +92,7 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
   (item.comm || 0) +
   (item.fare || 0);
 
-   console.log(itemTotal);
+  //  console.log(itemTotal);
 
         return {
           ...item,
@@ -192,7 +192,7 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
     }
 
     if (data.receipt?.shareId) {
-      router.push(`/${slug}/purchase/${data.receipt.shareId}`)
+      router.push(`/${slug}/purchase/${data.receipt.shareId}?owner=true&slug=${slug}`)
     } else {
       throw new Error("shareId not returned from server")
     }

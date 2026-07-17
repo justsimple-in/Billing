@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getBusiness } from "@/lib/actions/getbusiness";
 import { getSuppliersCollection } from "@/lib/collections/suppliers";
+import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
 
 export async function GET(
   request: Request,
@@ -8,13 +8,13 @@ export async function GET(
 ) {
   const { slug } = await params;
 
-  const business = await getBusiness(slug);
-
+  const business = await getAuthorizedBusiness(slug);
+  
   if (!business) {
-    return NextResponse.json(
-      { error: "Business not found" },
-      { status: 404 }
-    );
+      return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 403 }
+      );
   }
 
   const collection = await getSuppliersCollection();
@@ -44,14 +44,14 @@ export async function POST(
   try {
     const { slug } = await params;
 
-    const business = await getBusiness(slug);
+    const business = await getAuthorizedBusiness(slug);
 
-    if (!business) {
-      return NextResponse.json(
-        { error: "Business not found" },
-        { status: 404 }
-      );
-    }
+if (!business) {
+    return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 403 }
+    );
+}
 
     const body = await request.json();
 
