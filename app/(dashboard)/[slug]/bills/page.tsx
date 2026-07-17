@@ -2,8 +2,9 @@ import Link from "next/link";
 import { getInvoicesCollection } from "@/lib/mongodb";
 import { getBusiness } from "@/lib/actions/getbusiness";
 import { Eye, Pencil, Plus } from "lucide-react";
+import SearchBar from "@/components/SearchBar";
 
-async function getInvoices(slug: string) {
+async function getInvoices(slug: string , search: string) {
   const business = await getBusiness(slug);
 
   // console.log(slug)
@@ -11,13 +12,32 @@ async function getInvoices(slug: string) {
 
   const collection = await getInvoicesCollection();
 
-  const invoices = await collection
-  .find({
-    businessId: business._id!.toString(),
-  })
+  const query: any = {
+  businessId: business._id!.toString(),
+};
+
+if (search.trim()) {
+  query.$or = [
+    {
+      clientName: {
+        $regex: search,
+        $options: "i",
+      },
+    },
+    {
+      billNo: {
+        $regex: search,
+        $options: "i",
+      },
+    },
+  ];
+}
+
+const invoices = await collection
+  .find(query)
   .sort({
-    createdAt: -1,
-  })
+      createdAt: -1,
+    })
   .toArray();
 
     // console.log("Invoices fetched for slug:", slug, "Count:", invoices.length);
@@ -38,30 +58,37 @@ async function getInvoices(slug: string) {
 
 export default async function BillsHistoryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ search?: string }>;
+
 }) {
   const { slug } = await params;
+  const { search = "" } = await searchParams;
 
-  const invoices = await getInvoices(slug);
+  const invoices = await getInvoices(slug, search);
 
   return (
     <main className="mx-auto max-w-7xl text-black px-4 py-6 sm:px-6 sm:py-8">
   <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
     <div>
-      <h1 className="text-2xl font-bold sm:text-3xl">Invoices</h1>
+      <h1 className="text-2xl font-bold sm:text-3xl text-white">Invoices</h1>
       <p className="mt-1 text-sm text-neutral-500 sm:text-base">
         View and manage all invoices.
       </p>
     </div>
 
+    <div className="flex gap-3">
+      <SearchBar placeholder="Search invoices..." />
     <Link
       href={`/${slug}/bills/new`}
       className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-300 px-4 py-2.5 text-sm text-white hover:bg-neutral-800 sm:py-2 sm:text-base"
-    >
+      >
       <Plus className="h-4 w-4" />
-      New Bill
+      New 
     </Link>
+      </div>
   </div>
 
   {invoices.length === 0 ? (
