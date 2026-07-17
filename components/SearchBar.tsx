@@ -15,29 +15,21 @@ export default function SearchBar({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [value, setValue] = useState(
-    searchParams.get("search") ?? ""
-  );
+  const [value, setValue] = useState(searchParams.get("search") ?? "");
 
   useEffect(() => {
-    setValue(searchParams.get("search") ?? "");
-  }, [searchParams]);
+    const params = new URLSearchParams(searchParams.toString());
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const params = new URLSearchParams(searchParams.toString());
+    if (value.trim()) {
+      params.set("search", value.trim());
+    } else {
+      params.delete("search");
+    }
 
-      if (value.trim()) {
-        params.set("search", value.trim());
-      } else {
-        params.delete("search");
-      }
-
-      router.replace(`${pathname}?${params.toString()}`);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [value, pathname, router, searchParams]);
+    router.replace(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
+  }, [value]);
 
   return (
     <div className="relative w-full max-w-md">
@@ -47,11 +39,10 @@ export default function SearchBar({
       />
 
       <input
-        type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-neutral-300 bg-white py-2.5 pl-10 pr-10 outline-none transition focus:border-black"
+        className="w-full rounded-lg border border-neutral-300 bg-white py-2.5 pl-10 pr-10 outline-none focus:border-black"
       />
 
       {value && (
