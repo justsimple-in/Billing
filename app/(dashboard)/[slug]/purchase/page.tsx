@@ -3,8 +3,9 @@ import { Eye, Pencil, Plus } from "lucide-react";
 
 import { getBusiness } from "@/lib/actions/getbusiness";
 import { getPurchaseReceiptsCollection } from "@/lib/collections/purchaseReceipt";
+import SearchBar from "@/components/SearchBar";
 
-async function getPurchases(slug: string) {
+async function getPurchases(slug: string, search: string) {
   const business = await getBusiness(slug);
 
   if (!business) return [];
@@ -20,12 +21,32 @@ async function getPurchases(slug: string) {
     })
     .toArray();
 
-  return purchases.map((purchase) => ({
+    
+
+  const searchLower = search.trim().toLowerCase();
+
+  const filtered = !searchLower
+    ? purchases
+    : purchases.filter((purchase) => { 
+      const text = [
+        purchase.receiptNo,
+        purchase.supplierName,
+        purchase.total,
+        // purchase.newBalance,
+        purchase.purchaseDate,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return text.includes(searchLower);
+    });
+
+  return filtered.map((purchase) => ({
     _id: purchase._id.toString(),
     shareId: purchase.shareId,
     receiptNo: purchase.receiptNo,
     supplierName: purchase.supplierName,
-    purchaseDate: purchase.purchaseDate,
+    purchaseDate: purchase.receiptDate,
     total: purchase.total,
     newBalance: purchase.newBalance,
     version: purchase.version ?? 1,
@@ -36,12 +57,17 @@ async function getPurchases(slug: string) {
 
 export default async function PurchaseHistoryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ search?: string }>;
 }) {
-  const { slug } = await params;
+  const { slug  } = await params;
+  const { search = "" } = await searchParams;
 
-  const purchases = await getPurchases(slug);
+  const purchases = await getPurchases(slug , search);
+
+  
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 text-black sm:px-6 sm:py-8">
@@ -56,13 +82,17 @@ export default async function PurchaseHistoryPage({
           </p>
         </div>
 
+        <div className="flex gap-3">
+                <SearchBar placeholder="Search receipts..." />
+          
         <Link
           href={`/${slug}/purchase/new`}
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-300 px-4 py-2.5 text-sm text-white hover:bg-neutral-800 sm:py-2 sm:text-base"
         >
           <Plus className="h-4 w-4" />
-          New Purchase
+          New
         </Link>
+        </div>
       </div>
 
       {purchases.length === 0 ? (
@@ -105,7 +135,7 @@ export default async function PurchaseHistoryPage({
                     <p className="text-neutral-400">Date</p>
                     <p className="font-medium">
                       {new Date(
-                        purchase.purchaseDate
+                        purchase.purchaseDate 
                       ).toLocaleDateString("en-GB")}
                     </p>
                   </div>

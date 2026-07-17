@@ -12,37 +12,57 @@ async function getInvoices(slug: string , search: string) {
 
   const collection = await getInvoicesCollection();
 
-  const query: any = {
-  businessId: business._id!.toString(),
-};
+//   const query: any = {
+//   businessId: business._id!.toString(),
+// };
 
-if (search.trim()) {
-  query.$or = [
-    {
-      clientName: {
-        $regex: search,
-        $options: "i",
-      },
-    },
-    {
-      billNo: {
-        $regex: search,
-        $options: "i",
-      },
-    },
-  ];
-}
+// if (search.trim()) {
+//   query.$or = [
+//     {
+//       clientName: {
+//         $regex: search,
+//         $options: "i",
+//       },
+//     },
+//     {
+//       billNo: {
+//         $regex: search,
+//         $options: "i",
+//       },
+//     },
+//   ];
+// }
+
+
 
 const invoices = await collection
-  .find(query)
-  .sort({
-      createdAt: -1,
-    })
+  .find({
+    businessId: business._id!.toString(),
+  })
+  .sort({ createdAt: -1 })
   .toArray();
 
+
+  const searchLower = search.trim().toLowerCase();
+
+const filtered = !searchLower
+  ? invoices
+  : invoices.filter((invoice) => {
+      const text = [
+        invoice.billNo,
+        invoice.clientName,
+        invoice.total,
+        invoice.newBalance,
+        invoice.invoiceDate,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return text.includes(searchLower);
+    });
     // console.log("Invoices fetched for slug:", slug, "Count:", invoices.length);
 
-  return invoices.map((i) => ({
+  return filtered.map((i) => ({
     _id: i._id.toString(),
     shareId: i.shareId,
     billNo: i.billNo,
