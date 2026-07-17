@@ -44,7 +44,7 @@ const owner = await users.findOne({
         {business.name}
       </h1>
 
-      <p className="mt-2 text-black">
+      <p className="mt-2 text-white">
         Welcome to your billing workspace.
       </p>
 
