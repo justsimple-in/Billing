@@ -9,6 +9,7 @@ import {
   MapPin,
   Leaf,
   User,
+  CreditCard,
 } from "lucide-react";
 
 import { getBusiness } from "@/lib/actions/getbusiness";
@@ -211,6 +212,21 @@ const owner = await users.findOne({
 
           <p className="mt-2 text-sm text-black">
             View all suppliers.
+          </p>
+        </Link>
+
+        <Link
+          href={`/${slug}/payment/new`}
+          className="rounded-2xl border bg-white p-6 shadow-sm transition hover:border-blue-500 hover:shadow"
+        >
+          <CreditCard className="mb-3 h-8 w-8 text-purple-600" />
+
+          <h3 className="font-semibold  text-black ">
+            New Payment
+          </h3>
+
+          <p className="mt-2 text-sm text-black">
+            Record a new payment.
           </p>
         </Link>
         
