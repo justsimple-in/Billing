@@ -194,9 +194,9 @@ export interface PurchaseReceipt {
 
   selectedSupplierId: string;
 
-  // balance: number;
+  balance: number;
 
-  // paid: number;
+  paid: number;
 
   fare: boolean;
 
@@ -208,10 +208,10 @@ export interface PurchaseReceipt {
 
   total: number;
 
-  // newBalance: number;
+  newBalance: number;
 }
 
-export interface PurchaseHistoryEntry extends PurchaseReceipt {
+export interface PurchaseHistoryEntry extends PurchaseReceipt  {
   _id: string;
 
   createdAt: string;

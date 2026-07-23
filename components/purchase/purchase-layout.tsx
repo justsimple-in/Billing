@@ -39,7 +39,9 @@ const cellR: React.CSSProperties = { padding: "6px 5px", textAlign: "right" }
  */
 export const PurchaseLayout = forwardRef<HTMLDivElement, Props>(
   function PurchaseLayout({ invoice }, ref) {
-    // const subtotal = invoice.total - invoice.balance
+    const subtotal = invoice.total - invoice.balance
+
+    console.log("PurchaseLayout invoice:", invoice);
 
     return (
       <div
@@ -247,8 +249,8 @@ export const PurchaseLayout = forwardRef<HTMLDivElement, Props>(
           }}
         >
           <div style={{ width: "100%", maxWidth: "256px" }}>
-            {/* <Row label="Subtotal" value={money(subtotal)} muted /> */}
-            {/* <Row label="Previous Balance" value={money(invoice.balance)} muted /> */}
+           {invoice.balance ? <Row label="Subtotal" value={money(subtotal)} muted /> : null}
+            {invoice.balance ? <Row label="Previous Oustanding" value={money(invoice.balance)} muted /> : null}
             <div
               style={{
                 display: "flex",
@@ -269,8 +271,8 @@ export const PurchaseLayout = forwardRef<HTMLDivElement, Props>(
                 color: c.green,
               }}
             >
-              {/* <span>Paid</span> */}
-              {/* <span>{money(invoice.paid)}</span> */}
+              <span>Paid</span>
+              <span>{money(invoice.paid)}</span>
             </div>
             <div
               style={{
@@ -282,8 +284,8 @@ export const PurchaseLayout = forwardRef<HTMLDivElement, Props>(
                 fontWeight: 700,
               }}
             >
-              {/* <span>New Balance</span> */}
-              {/* <span>{money(invoice.newBalance)}</span> */}
+              <span>New Balance</span>
+              <span>{money(invoice.newBalance)}</span>
             </div>
           </div>
         </div>

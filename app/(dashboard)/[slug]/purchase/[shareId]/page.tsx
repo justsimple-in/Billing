@@ -98,7 +98,9 @@ async function getReceipt(
 
       total: doc.total,
 
-    //   newBalance: doc.newBalance,
+      newBalance: doc.newBalance,
+      balance: doc.balance,
+      paid: doc.paid,
     };
   } catch (err) {
     console.error("[Purchase] Error loading receipt:", err);

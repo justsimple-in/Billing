@@ -137,7 +137,11 @@ if (!business) {
 
       total: original.total,
 
-    //   newBalance: original.newBalance,
+      newBalance: original.newBalance,
+
+      paid: original.paid,
+      
+      balance: original.balance,
 
       createdAt: original.createdAt,
     };

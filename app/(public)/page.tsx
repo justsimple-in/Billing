@@ -47,7 +47,7 @@ export default function HomePage() {
         <h1 className="mt-6 max-w-4xl text-5xl font-bold tracking-tight">
           Professional Billing Software
           <br />
-          for Small Businesses
+          for Businesses
         </h1>
 
         <p className="mt-6 max-w-2xl text-lg text-neutral-200">

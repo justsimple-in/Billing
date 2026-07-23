@@ -53,8 +53,8 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
   const [notes, setNotes] = useState(initial?.notes ?? "")
   // const [billNo, setBillNo] = useState(initial?.billNo ?? 1)
   const [fare, setFare] = useState(false)
-  // const [paid, setPaid] = useState(initial?.paid ?? 0)
-  // const [balance, setBalance] = useState(initial?.balance ?? 0)
+  const [paid, setPaid] = useState(initial?.paid ?? 0)
+  const [balance, setBalance] = useState(initial?.balance ?? 0)
   const [receiptDate, setreceiptDate] = useState(initial?.receiptDate ?? "")
   const [submitting, setSubmitting] = useState(false)
 
@@ -114,7 +114,7 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
   )
 
   const total = billTotal
-  const newBalance = billTotal
+  const newBalance = billTotal + balance - paid
 
   const updateItem = useCallback(
     (index: number, field: keyof PurchaseItem, value: string | number) => {
@@ -166,6 +166,8 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
     extra,
     notes,
     total,
+    balance,
+    paid,
     newBalance,
   }
 
@@ -493,14 +495,16 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
             </div>
           </div>
 
-          {/* Balance + Paid */}
-          {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2"> */}
-          {/* <div>
+          <p className="text-sm text-neutral-500">
+            Balance + Paid
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
               <label
                 className={`mb-1 block text-sm font-medium ${balance <= 0 ? "text-emerald-700" : "text-red-700"
                   }`}
               >
-                Previous Balance
+                Previous outstanding 
               </label>
               <NumberInput
                 // type="number"
@@ -508,8 +512,8 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
                 onChange={(e) => setBalance(e)}
                 className={inputCls}
               />
-            </div> */}
-          {/* <div>
+            </div>
+          <div>
               <label className="mb-1 block text-sm font-medium text-emerald-700">
                 Paid Amount
               </label>
@@ -519,8 +523,8 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
                 onChange={(e) => setPaid(e)}
                 className={inputCls}
               />
-            </div> */}
-          {/* </div> */}
+            </div>
+          </div>
 
           {/* Notes */}
           <div>
@@ -538,9 +542,9 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
           {/* Totals */}
           <div className="rounded-lg bg-neutral-900 p-4 text-right text-white">
             <p className="text-lg font-semibold">Total: Rs {total.toFixed(2)}</p>
-            {/* <p className="text-sm text-neutral-300">
-              New Balance: Rs {newBalance.toFixed(2)}
-            </p> */}
+            <p className="text-sm text-neutral-300">
+              New  Balance: Rs {newBalance.toFixed(2)}
+            </p>
           </div>
 
           <div className="flex justify-end">
