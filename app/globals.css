@@ -166,4 +166,17 @@
   html {
     @apply font-sans;
   }
+  
+}
+
+@media print {
+
+  body {
+    margin: 0;
+    background: white;
+  }
+
+  @page {
+    margin: 0;
+  }
 }
