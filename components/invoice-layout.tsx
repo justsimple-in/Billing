@@ -177,7 +177,9 @@ export const InvoiceLayout = forwardRef<HTMLDivElement, Props>(
         >
           <thead>
             <tr style={{ background: c.ink, color: c.white, textAlign: "left" }}>
-              { (invoice.showCarat ?? false) && (<th style={cell}>Sr.</th>) }
+              {invoice.showCarat === false && (
+  <th style={cell}>Sr.</th>
+)}
               <th style={cell}>Item</th>
               {(invoice.showCarat ?? true )&& (<th style={cellR}>Carat</th>)}
               <th style={cellR}>Qty</th>
@@ -190,7 +192,7 @@ export const InvoiceLayout = forwardRef<HTMLDivElement, Props>(
           <tbody>
             {invoice.items.map((item, i) => (
               <tr key={i} style={{ borderBottom: `1px solid ${c.line}` }}>
-                {(invoice.showCarat ?? false) && (
+                {invoice.showCarat === false && (
   <td style={cell}>{i + 1}</td>
 )}
                 <td style={cell}>{item.description || "—"}</td>
