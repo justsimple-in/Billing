@@ -118,7 +118,7 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
         const res = await fetch(`/${slug}/api/clients`)
         
         const data = await res.json()
-        setBillNo(data.invoiceSettings.lastBillNo + 1);
+        // setBillNo(data.invoiceSettings.lastBillNo + 1);
         setClients(data.clients || [])
         setSettings(data.invoiceSettings || null);
         setFare(data.invoiceSettings?.fields.fare ?? true);
