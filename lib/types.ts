@@ -71,6 +71,12 @@ export interface InvoiceHistoryEntry extends InvoiceDetails {
 //   history?: InvoiceHistoryEntry[]
 // }
 
+
+export interface BusinessContact {
+  name: string;
+  phone: string;
+}
+
 export interface Business {
   _id: string;
 
@@ -80,6 +86,8 @@ export interface Business {
 
   address: string;
 
+  contacts: BusinessContact[];
+
   phone: string;
 
   logo?: string;
@@ -88,6 +96,8 @@ export interface Business {
 
   createdAt?: string;
 }
+
+
 
 export interface User {
   _id: string;
