@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getPurchaseReceiptsCollection } from "@/lib/collections/purchaseReceipt";
 import type { PurchaseHistoryEntry } from "@/lib/types";
 import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
+import { getSuppliersCollection } from "@/lib/collections/suppliers";
+import { ObjectId } from "mongodb";
 
 // GET /[slug]/api/purchase/[shareId]
 export async function GET(
@@ -120,6 +122,8 @@ if (!business) {
 
       supplierName: original.supplierName,
 
+      businessSlug: original.businessSlug,
+
       selectedSupplierId:
         original.selectedSupplierId,
 
@@ -203,6 +207,10 @@ if (!business) {
 
       updatedAt: new Date().toISOString(),
 
+      paid: Number(body.paid) || 0,
+
+      balance: Number(body.balance) || 0,
+
       edited: true,
 
       history,
@@ -227,6 +235,19 @@ if (!business) {
         },
       }
     );
+
+    const suppliers = await getSuppliersCollection();
+
+await suppliers.updateOne(
+  {
+    _id: new ObjectId(newDoc.selectedSupplierId),
+  },
+  {
+    $set: {
+      prevBalance: newDoc.newBalance,
+    },
+  }
+);
 
     return NextResponse.json({
       receipt: {

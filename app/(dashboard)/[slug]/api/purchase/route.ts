@@ -3,6 +3,8 @@ import { nanoid } from "nanoid";
 
 import { getPurchaseReceiptsCollection } from "@/lib/collections/purchaseReceipt";
 import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
+import { ObjectId } from "bson";
+import { getSuppliersCollection } from "@/lib/collections/suppliers";
 
 // POST /[slug]/api/purchase
 export async function POST(
@@ -70,6 +72,18 @@ export async function POST(
     const receipts = await getPurchaseReceiptsCollection();
 
     const result = await receipts.insertOne(receiptDoc);
+    const suppliers = await getSuppliersCollection();
+
+    await suppliers.updateOne(
+      {
+        _id: new ObjectId(receiptDoc.selectedSupplierId),
+      },
+      {
+        $set: {
+          prevBalance: receiptDoc.newBalance,
+        },
+      }
+    );
 
     return NextResponse.json({
       receipt: {

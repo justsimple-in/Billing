@@ -184,6 +184,8 @@ export interface PurchaseReceipt {
 
   // supplierId: string;
 
+  businessSlug: string;
+
   version: number;
 
   createdAt: string;
@@ -245,3 +247,54 @@ export type PurchaseUnit =
   | "Bag"
   | "Piece"
   | "Kg";
+
+
+  export interface Payment {
+  businessId: string;
+
+  businessSlug: string;
+
+  version: number;
+
+  createdAt: string;
+
+  supplierName: string;
+
+  selectedSupplierId: string;
+
+  paymentDate: string;
+
+  amount: number;
+
+  notes: string;
+
+  previousBalance: number;
+
+  newBalance: number;
+}
+
+export interface PaymentHistoryEntry extends Payment {
+  _id: string;
+}
+
+export interface PaymentDocument extends Payment {
+  _id: string;
+
+  shareId: string;
+
+  paymentGroupId: string;
+
+  version: number;
+
+  active: boolean;
+
+  edited?: boolean;
+
+  previousPaymentId?: string;
+
+  replacedBy?: string;
+
+  history?: PaymentHistoryEntry[];
+
+  updatedAt?: string;
+}

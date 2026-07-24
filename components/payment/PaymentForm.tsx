@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import { Calendar, FileText, IndianRupee, Search } from "lucide-react";
 import { NumberInput } from "../number-format";
+import { Payment } from "@/lib/types";
+import { useRouter } from "next/dist/client/components/navigation";
 
 interface Supplier {
   _id: string;
@@ -14,24 +16,49 @@ interface Supplier {
 
 interface PaymentFormProps {
   slug: string;
+
   suppliers: Supplier[];
+
+  mode?: "new" | "edit";
+
+  editId?: string;
+
+  initial?: Payment;
 }
 
 export default function PaymentForm({
   slug,
   suppliers,
+  mode = "new",
+  editId,
+  initial,
 }: PaymentFormProps) {
-  const [search, setSearch] = useState("");
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
-    null
+  const [search, setSearch] = useState(
+    initial?.supplierName ?? ""
   );
 
-  const [paymentDate, setPaymentDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [selectedSupplier, setSelectedSupplier] =
+    useState<Supplier | null>(
+      initial
+        ? suppliers.find(
+          s => s._id === initial.selectedSupplierId
+        ) ?? null
+        : null
+    );
 
-  const [amount, setAmount] = useState(0);
-  const [notes, setNotes] = useState("");
+  const [paymentDate, setPaymentDate] =
+    useState(
+      initial?.paymentDate ??
+      new Date().toISOString().split("T")[0]
+    );
+
+  const [amount, setAmount] =
+    useState(initial?.amount ?? 0);
+
+  const [notes, setNotes] =
+    useState(initial?.notes ?? "");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const filteredSuppliers = useMemo(() => {
     if (!search) return [];
@@ -50,7 +77,7 @@ export default function PaymentForm({
     setSearch(supplier.supplierName);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     if (!selectedSupplier) {
@@ -58,17 +85,51 @@ export default function PaymentForm({
       return;
     }
 
-    console.log({
-      slug,
-      supplier: selectedSupplier,
-      paymentDate,
-      amount,
-      notes,
-    });
+    if (amount <= 0) {
+      alert("Enter a valid payment amount.");
+      return;
+    }
 
-    // TODO:
-    // call server action
-    // redirect to payment view page
+    setLoading(true);
+
+    try {
+      const endpoint =
+        mode === "edit"
+          ? `/${slug}/api/payment/${editId}`
+          : `/${slug}/api/payment`;
+
+      const method =
+        mode === "edit"
+          ? "PUT"
+          : "POST";
+
+      const res = await fetch(endpoint, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          supplierName: selectedSupplier.supplierName,
+          selectedSupplierId: selectedSupplier._id,
+          paymentDate,
+          amount,
+          notes,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to save payment");
+      }
+
+      router.push(`/payment/${data.payment.shareId}?owner=true&slug=${slug}`);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save payment.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -175,10 +236,14 @@ export default function PaymentForm({
 
       <div className="flex justify-end">
         <button
+          disabled={loading}
           type="submit"
-          className="rounded-lg bg-black px-6 py-2.5 font-medium text-white hover:bg-neutral-800"
         >
-          Save Payment
+          {loading
+            ? "Saving..."
+            : mode === "edit"
+              ? "Update Payment"
+              : "Save Payment"}
         </button>
       </div>
     </form>
