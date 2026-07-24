@@ -106,6 +106,7 @@ if (!business) {
   balance: original.balance,
   paid: original.paid,
   fare: original.fare,
+  showCarat: original.showCarat,
   items: original.items,
   extra: original.extra,
   notes: original.notes,
@@ -145,6 +146,8 @@ if (!business) {
   paid: Number(body.paid) || 0,
 
   fare: Boolean(body.fare),
+
+  showCarat: Boolean(body.showCarat),
 
   items: Array.isArray(body.items) ? body.items : [],
 
