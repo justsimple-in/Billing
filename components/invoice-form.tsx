@@ -88,7 +88,7 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
         setClients(data.clients);
 
         if (mode === "create") {
-          setBillNo(data.invoiceSettings.lastBillNo + 1);
+          // setBillNo(data.invoiceSettings.lastBillNo + 1);
           setSettings(
             data.invoiceSettings ?? {
               fields: {

@@ -85,7 +85,7 @@ export const InvoiceLayout = forwardRef<HTMLDivElement, Props>(
                 color: c.muted,
               }}
             >
-              Pintu Gupta (Proprietor): +91 9730419160
+              { invoice.showCarat == false ? "JP Gupta (Proprietor): +91 9892941330" : "Pintu Gupta (Proprietor): +91 9730419160 / 7822025245"   }
             </p>
             <p
               style={{
