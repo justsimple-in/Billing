@@ -1,16 +1,16 @@
+"use client";
+
 export default function ExamplePrintPage() {
   return (
-    <div className="bg-gray-200 flex justify-center p-10">
+    <div className="bg-gray-200 flex justify-center p-10 print:bg-white print:p-0">
       <div
   className="
     w-[80mm]
     bg-white
-    text-black
     p-3
     pb-[10mm]
-    font-mono
-    text-[13px]
     shadow-lg
+    print:shadow-none
   "
 >
 
@@ -150,6 +150,8 @@ export default function ExamplePrintPage() {
           Visit Again
         </div>
       </div>
+
+      
     </div>
   );
 }
