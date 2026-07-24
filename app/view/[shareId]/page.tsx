@@ -5,6 +5,7 @@ import { getInvoicesCollection } from "@/lib/mongodb"
 import { InvoiceShare } from "@/components/invoice-share"
 import type { InvoiceDetails } from "@/lib/types"
 import type { Metadata } from "next";
+import { getBusiness } from "@/lib/actions/getbusiness"
 
 
 export async function generateMetadata({
@@ -100,6 +101,8 @@ export default async function ViewInvoicePage({
 }) {
   const { shareId } = await params
   const invoice = await getInvoice(shareId)
+  const bussinessId = invoice?.businessId ?? "unknown"
+  const business = await getBusiness(bussinessId)
 
   // console.log(shareId);
 

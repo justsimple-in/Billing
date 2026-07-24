@@ -48,7 +48,7 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
   )
   const [extra, setExtra] = useState<Extra[]>(initial?.extra ?? [])
   const [notes, setNotes] = useState(initial?.notes ?? "")
-  const [billNo, setBillNo] = useState(initial?.billNo ?? 1)
+  const [billNo, setBillNo] = useState(initial?.billNo ?? 0)
   const [fare, setFare] = useState(initial?.fare ?? true)
   const [paid, setPaid] = useState(initial?.paid ?? 0)
   const [balance, setBalance] = useState(initial?.balance ?? 0)
