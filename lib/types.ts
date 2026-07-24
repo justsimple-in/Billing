@@ -43,6 +43,7 @@ export interface InvoiceDetails {
   balance: number
   paid: number
   fare: boolean
+  showCarat: boolean
   items: Item[]
   extra: Extra[]
   notes: string
@@ -77,6 +78,33 @@ export interface BusinessContact {
   phone: string;
 }
 
+export interface InvoiceSettings {
+  fields: {
+    carat: boolean;
+    commission: boolean;
+    fare: boolean;
+    previousBalance: boolean;
+    paidAmount: boolean;
+    additionalCharges: boolean;
+    notes: boolean;
+  };
+
+  lastBillNo: number;
+}
+
+export interface PurchaseSettings {
+  fields: {
+    unit: boolean;
+    unitCount: boolean;
+    weightPerUnit: boolean;
+    pricePerKg: boolean;
+    commission: boolean;
+    fare: boolean;
+    notes: boolean;
+  };
+  lastReceiptNo: number;
+}
+
 export interface Business {
   _id: string;
 
@@ -89,6 +117,10 @@ export interface Business {
   contacts: BusinessContact[];
 
   phone: string;
+
+   invoiceSettings: InvoiceSettings;
+
+  purchaseSettings: PurchaseSettings;
 
   logo?: string;
 

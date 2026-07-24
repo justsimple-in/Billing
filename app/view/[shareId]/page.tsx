@@ -80,6 +80,7 @@ async function getInvoice(shareId: string): Promise<InvoiceDetails | null> {
   balance: doc.balance,
   paid: doc.paid,
   fare: doc.fare,
+  showCarat: doc.showCarat,
   items: doc.items,
   extra: doc.extra,
   notes: doc.notes,

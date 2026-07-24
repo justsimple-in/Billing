@@ -52,6 +52,8 @@ businessSlug: business.slug,
 
   fare: Boolean(body.fare),
 
+  showCarat: Boolean(body.showCarat),
+
   items: Array.isArray(body.items) ? body.items : [],
 
   extra: Array.isArray(body.extra) ? body.extra : [],

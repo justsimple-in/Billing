@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/navigation"
 import { Plus, Trash2, Loader2, FileText, Save } from "lucide-react"
 import { ClientCombobox } from "@/components/client-combobox"
-import type { Client, Extra, Item, InvoiceDetails } from "@/lib/types"
+import type { Client, Extra, Item, InvoiceDetails, InvoiceSettings } from "@/lib/types"
 import { NumberInput } from "./number-format"
 
 const emptyItem = (): Item => ({
@@ -54,6 +54,18 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
   const [balance, setBalance] = useState(initial?.balance ?? 0)
   const [invoiceDate, setInvoiceDate] = useState(initial?.invoiceDate ?? "")
   const [submitting, setSubmitting] = useState(false)
+  const [settings, setSettings] = useState<InvoiceSettings | null>({
+              fields: {
+                carat: true,
+                commission: true,
+                fare: true,
+                previousBalance: true,
+                paidAmount: true,
+                additionalCharges: true,
+                notes: true,
+              },
+              lastBillNo: 0,
+            });
 
   // Default today's date only for a new invoice.
   useEffect(() => {
@@ -67,11 +79,49 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
 
   // Fetch clients for the searchable combobox.
   useEffect(() => {
+
+    const loadInvoiceData = async () => {
+      try {
+        const res = await fetch(`/${slug}/api/settings`);
+        const data = await res.json();
+
+        setClients(data.clients);
+
+        if (mode === "create") {
+          // setBillNo(data.invoiceSettings.lastBillNo + 1);
+          setSettings(
+            data.invoiceSettings ?? {
+              fields: {
+                carat: true,
+                commission: true,
+                fare: true,
+                previousBalance: true,
+                paidAmount: true,
+                additionalCharges: true,
+                notes: true,
+              },
+              lastBillNo: 0,
+            }
+          );
+        }
+
+        // later
+        // setInvoiceSettings(data.invoiceSettings);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    // loadInvoiceData();
     const fetchClients = async () => {
       try {
         const res = await fetch(`/${slug}/api/clients`)
+        
         const data = await res.json()
+        // setBillNo(data.invoiceSettings.lastBillNo + 1);
         setClients(data.clients || [])
+        setSettings(data.invoiceSettings || null);
+        setFare(data.invoiceSettings?.fields.fare ?? true);
       } catch (err) {
         console.error("[v0] Error fetching clients:", err)
       }
@@ -86,7 +136,7 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
           (item.comm || 0) +
           (item.fare || 0) +
           (item.price || 0) * (item.quantity || 0)
-        const eachItemTotal = (item.carat || 0) * perCarat
+        const eachItemTotal = (item.carat || 1) * perCarat
         return { ...item, perCarat, eachItemTotal }
       }),
     [items],
@@ -152,6 +202,7 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
       balance,
       paid,
       fare,
+      showCarat: settings?.fields.carat ?? true,
       items: computedItems,
       extra,
       notes,
@@ -294,7 +345,8 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
                         className={inputCls}
                       />
                     </div>
-                    <div>
+                    
+                    { settings?.fields.carat &&   <div>
                       <label className="mb-1 block text-xs text-neutral-500">
                         Carat
                         {item.perCarat > 0 && (
@@ -309,7 +361,7 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
                         onChange={(value) => updateItem(index, "carat", value)}
                         className={inputCls}
                       />
-                    </div>
+                    </div>}
                     <div>
                       <label className="mb-1 block text-xs text-neutral-500">
                         Quantity
@@ -345,7 +397,7 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
                           // type="number"
                           value={item.comm}
                           onChange={(e) =>
-                            updateItem(index, "comm", e )
+                            updateItem(index, "comm", e)
                           }
                           className={inputCls}
                         />
