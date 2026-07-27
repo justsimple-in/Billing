@@ -201,6 +201,68 @@ export interface Supplier {
   phone?: string;
 }
 
+export interface SupplierReportItem {
+  itemName: string;
+
+  carats: number;
+
+  weightPerCarat: number;
+
+  pricePerKg: number;
+
+  fare: number;
+
+  amount: number;
+}
+
+export interface SupplierReportReceipt {
+  _id: string;
+
+  date: string;
+
+  total: number;
+
+  items: SupplierReportItem[];
+}
+
+export interface SupplierReportPayment {
+  _id: string;
+
+  date: string;
+
+  amount: number;
+
+  notes: string;
+}
+
+export interface SupplierReportResponse {
+  supplier: {
+    _id: string;
+
+    name: string;
+
+    phone: string;
+
+    address: string;
+  };
+
+  from: string;
+
+  to: string;
+
+  receipts: SupplierReportReceipt[];
+
+  payments: SupplierReportPayment[];
+
+  totals: {
+    receipts: number;
+
+    payments: number;
+
+    outstanding: number;
+  };
+}
+
 export interface PurchaseItem {
   description: string;
 

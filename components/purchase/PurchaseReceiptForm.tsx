@@ -511,8 +511,7 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
                 className={inputCls}
               />
             </div>
-          <div>
-            </div>
+          
           <div>
               <label className="mb-1 block text-sm font-medium text-emerald-700">
                 Paid Amount
