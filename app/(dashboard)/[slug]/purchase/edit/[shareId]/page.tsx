@@ -1,36 +1,93 @@
 import Link from "next/link";
-import { ArrowLeft, Construction } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
-interface Props {
+import { getPurchaseReceiptsCollection } from "@/lib/collections/purchaseReceipt";
+import { PurchaseReceiptForm} from "@/components/purchase/PurchaseReceiptForm";
+import type { PurchaseReceipt } from "@/lib/types";
+
+async function getReceipt(
+  shareId: string
+): Promise<PurchaseReceipt | null> {
+  try {
+    const receipts = await getPurchaseReceiptsCollection();
+
+    const doc = await receipts.findOne({
+      shareId,
+      active: true,
+    });
+
+    if (!doc) return null;
+
+    return {
+      businessId: doc.businessId,
+      businessSlug: doc.businessSlug,
+
+      createdAt: doc.createdAt,
+      version: doc.version ?? 1,
+
+      supplierName: doc.supplierName,
+      selectedSupplierId: doc.selectedSupplierId,
+
+      receiptDate: doc.receiptDate,
+
+      fare: doc.fare,
+
+      items: doc.items,
+      extra: doc.extra,
+
+      notes: doc.notes,
+
+      total: doc.total,
+      paid: doc.paid,
+      balance: doc.balance,
+      newBalance: doc.newBalance,
+    };
+  } catch (err) {
+    console.error("Error loading purchase receipt:", err);
+    return null;
+  }
+}
+
+export default async function EditPurchasePage({
+  params,
+}: {
   params: Promise<{
     slug: string;
     shareId: string;
   }>;
-}
+}) {
+  const { slug, shareId } = await params;
 
-export default async function EditPurchaseComingSoon({ params }: Props) {
-  const { slug } = await params;
+  const receipt = await getReceipt(shareId);
+
+  if (!receipt) {
+    return (
+      <main className="mx-auto flex min-h-svh max-w-3xl flex-col items-center justify-center gap-4 px-4 text-center">
+        <h1 className="text-2xl font-bold">
+          Purchase receipt not found
+        </h1>
+
+        <p className="text-muted-foreground">
+          This purchase receipt may have been removed or the link is invalid.
+        </p>
+
+        <Link
+          href={`/${slug}/purchase`}
+          className="inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Purchase History
+        </Link>
+      </main>
+    );
+  }
 
   return (
-    <main className="mx-auto flex min-h-[70vh] max-w-xl flex-col items-center justify-center px-6 text-center">
-      <Construction className="mb-6 h-16 w-16 text-amber-500" />
-
-      <h1 className="text-3xl font-bold text-white">
-        Edit Purchase Coming Soon
-      </h1>
-
-      <p className="mt-4 text-neutral-600">
-        Editing purchase receipts is currently under development.
-        <br />
-        This feature will be available in a future update.
-      </p>
-
-      <Link
-        href={`/${slug}/purchase`}
-        className="mt-8 rounded-lg bg-black px-5 py-3 text-white hover:bg-neutral-800"
-      >
-        ← Back to Purchase History
-      </Link>
-    </main>
+    <PurchaseReceiptForm
+      mode="edit"
+      slug={slug}
+      initial={receipt}
+      editId={shareId}
+    />
   );
 }

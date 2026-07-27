@@ -55,6 +55,8 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
   const [fare, setFare] = useState(false)
   const [paid, setPaid] = useState(initial?.paid ?? 0)
   const [balance, setBalance] = useState(initial?.balance ?? 0)
+  const [paid, setPaid] = useState(initial?.paid ?? 0)
+  const [balance, setBalance] = useState(initial?.balance ?? 0)
   const [receiptDate, setreceiptDate] = useState(initial?.receiptDate ?? "")
   const [submitting, setSubmitting] = useState(false)
 
@@ -168,6 +170,8 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
     balance,
     notes,
     total,
+    balance,
+    paid,
     newBalance,
   }
 
@@ -512,6 +516,8 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
               />
             </div>
           <div>
+            </div>
+          <div>
               <label className="mb-1 block text-sm font-medium text-emerald-700">
                 Paid Amount
               </label>
@@ -521,6 +527,8 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
                 onChange={(e) => setPaid(e)}
                 className={inputCls}
               />
+            </div>
+          </div>
             </div>
           </div>
 
