@@ -6,6 +6,7 @@ import { ObjectId } from "mongodb";
 import { getBusiness } from "@/lib/actions/getbusiness";
 import { getSuppliersCollection } from "@/lib/collections/suppliers";
 import { getPurchaseReceiptsCollection} from "@/lib/collections/purchaseReceipt";
+import { SupplierEditor } from "@/components/suppliers/SupplierEditor";
 
 interface Props {
   params: Promise<{
@@ -58,9 +59,21 @@ export default async function SupplierPage({ params }: Props) {
       </Link>
 
       <div className="rounded-2xl border bg-white p-8 shadow-sm">
-        <h1 className="text-3xl font-bold text-black">
-          {supplier.supplierName}
-        </h1>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <h1 className="text-3xl font-bold text-black">
+            {supplier.supplierName}
+          </h1>
+          <SupplierEditor
+            slug={slug}
+            supplierId={supplier._id.toString()}
+            initial={{
+              supplierName: supplier.supplierName,
+              phone: supplier.phone ?? "",
+              address: supplier.address ?? "",
+              prevBalance: supplier.prevBalance ?? 0,
+            }}
+          />
+        </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           <div>

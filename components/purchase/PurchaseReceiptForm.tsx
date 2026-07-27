@@ -55,8 +55,6 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
   const [fare, setFare] = useState(false)
   const [paid, setPaid] = useState(initial?.paid ?? 0)
   const [balance, setBalance] = useState(initial?.balance ?? 0)
-  const [paid, setPaid] = useState(initial?.paid ?? 0)
-  const [balance, setBalance] = useState(initial?.balance ?? 0)
   const [receiptDate, setreceiptDate] = useState(initial?.receiptDate ?? "")
   const [submitting, setSubmitting] = useState(false)
 
@@ -170,8 +168,6 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
     balance,
     notes,
     total,
-    balance,
-    paid,
     newBalance,
   }
 
@@ -529,8 +525,8 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
               />
             </div>
           </div>
-            </div>
-          </div>
+            {/* </div> */}
+          {/* </div> */}
 
           Notes
           <div>
@@ -577,6 +573,6 @@ export function PurchaseReceiptForm({ mode, slug, initial, editId }: Props) {
           </div>
         </form>
       </div>
-    </main>
+     </main>
   )
 }

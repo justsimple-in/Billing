@@ -84,6 +84,8 @@ async function getReceipt(
 
       supplierName: doc.supplierName,
 
+      businessSlug: doc.businessSlug,
+
       receiptDate: doc.receiptDate,
 
       selectedSupplierId: doc.selectedSupplierId,

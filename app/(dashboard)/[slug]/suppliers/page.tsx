@@ -74,7 +74,10 @@ export default async function SuppliersPage({ params }: Props) {
 
             <div className="text-right">
               <p className="font-semibold text-black">
-                .....
+                {supplier.prevBalance.toLocaleString("en-IN", {
+                  style: "currency",
+                  currency: "INR",
+                })}
               </p>
 
               <p className="text-sm text-neutral-500">

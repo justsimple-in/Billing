@@ -60,10 +60,6 @@ export async function POST(
       
       balance: Number(body.balance) || 0,
 
-      paid: Number(body.paid) || 0,
-      
-      balance: Number(body.balance) || 0,
-
       newBalance: Number(body.newBalance) || 0,
 
       createdAt: new Date().toISOString(),

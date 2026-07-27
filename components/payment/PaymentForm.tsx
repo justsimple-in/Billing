@@ -1,18 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Calendar, FileText, IndianRupee, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Calendar, FileText, IndianRupee } from "lucide-react";
 import { NumberInput } from "../number-format";
-import { Payment } from "@/lib/types";
+import { SupplierCombobox } from "../suppliers/supplier-combobox";
+import type { Payment, Supplier } from "@/lib/types";
 import { useRouter } from "next/dist/client/components/navigation";
-
-interface Supplier {
-  _id: string;
-  supplierName: string;
-  phone: string;
-  address: string;
-  prevBalance: number;
-}
 
 interface PaymentFormProps {
   slug: string;
@@ -36,6 +29,7 @@ export default function PaymentForm({
   const [search, setSearch] = useState(
     initial?.supplierName ?? ""
   );
+  const [supplierOptions, setSupplierOptions] = useState(suppliers);
 
   const [selectedSupplier, setSelectedSupplier] =
     useState<Supplier | null>(
@@ -60,17 +54,9 @@ export default function PaymentForm({
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const filteredSuppliers = useMemo(() => {
-    if (!search) return [];
-
-    return suppliers
-      .filter((supplier) =>
-        supplier.supplierName
-          .toLowerCase()
-          .includes(search.toLowerCase())
-      )
-      .slice(0, 8);
-  }, [search, suppliers]);
+  useEffect(() => {
+    setSupplierOptions(suppliers);
+  }, [suppliers]);
 
   function handleSupplierSelect(supplier: Supplier) {
     setSelectedSupplier(supplier);
@@ -123,7 +109,7 @@ export default function PaymentForm({
         throw new Error(data.error || "Failed to save payment");
       }
 
-      router.push(`/payment/${data.payment.shareId}?owner=true&slug=${slug}`);
+      router.push(`/${slug}/payment/${data.payment.shareId}`);
     } catch (err) {
       console.error(err);
       alert("Failed to save payment.");
@@ -143,46 +129,18 @@ export default function PaymentForm({
           Supplier
         </label>
 
-        <div className="relative">
-          <Search
-            className="absolute left-3 top-3 text-neutral-400"
-            size={18}
-          />
-
-          <input
-            type="text"
-            placeholder="Search supplier..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setSelectedSupplier(null);
-            }}
-            className="w-full rounded-lg border  border-gray-300  py-2.5 pl-10 pr-4 outline-none focus:border-black"
-          />
-
-          {!selectedSupplier && filteredSuppliers.length > 0 && (
-            <div className="absolute z-20 mt-1 max-h-64 w-full overflow-auto rounded-lg border bg-white shadow-lg">
-              {filteredSuppliers.map((supplier) => (
-                <button
-                  key={supplier._id}
-                  type="button"
-                  onClick={() => handleSupplierSelect(supplier)}
-                  className="block w-full border-b px-4 py-3 text-left hover:bg-neutral-100"
-                >
-                  <p className="font-medium">
-                    {supplier.supplierName}
-                  </p>
-
-                  {supplier.phone && (
-                    <p className="text-sm text-neutral-500">
-                      {supplier.phone}
-                    </p>
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <SupplierCombobox
+          slug={slug}
+          suppliers={supplierOptions}
+          value={search}
+          onSelect={(supplier) => {
+            handleSupplierSelect(supplier);
+          }}
+          onSupplierAdded={(supplier) => {
+            setSupplierOptions((prev) => [...prev, supplier]);
+            handleSupplierSelect(supplier);
+          }}
+        />
       </div>
 
       {/* Payment Date */}
