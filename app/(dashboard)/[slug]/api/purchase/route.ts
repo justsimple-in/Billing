@@ -3,6 +3,8 @@ import { nanoid } from "nanoid";
 
 import { getPurchaseReceiptsCollection } from "@/lib/collections/purchaseReceipt";
 import { getAuthorizedBusiness } from "@/lib/actions/getAuthorizedBusiness";
+import { getClientsCollection } from "@/lib/collections/clients";
+import { ObjectId } from "mongodb";
 
 // POST /[slug]/api/purchase
 export async function POST(
@@ -54,6 +56,10 @@ export async function POST(
 
       total: Number(body.total) || 0,
 
+      paid: Number(body.paid) || 0,
+      
+      balance: Number(body.balance) || 0,
+
       newBalance: Number(body.newBalance) || 0,
 
       createdAt: new Date().toISOString(),
@@ -66,6 +72,18 @@ export async function POST(
     const receipts = await getPurchaseReceiptsCollection();
 
     const result = await receipts.insertOne(receiptDoc);
+
+    if (receiptDoc.selectedSupplierId) {
+          try {
+            const clients = await getClientsCollection()
+            await clients.updateOne(
+              { _id: new ObjectId(receiptDoc.selectedSupplierId) },
+              { $set: { prevBalance: receiptDoc.newBalance } },
+            )
+          } catch (err) {
+            console.error("[v0] Failed to update client balance:", err)
+          }
+        }
 
     return NextResponse.json({
       receipt: {

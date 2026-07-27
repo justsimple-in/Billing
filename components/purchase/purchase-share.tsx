@@ -32,6 +32,10 @@ export function PurchaseShare({ invoice, shareId }: Props) {
   }
 
   // Render the invoice DOM to a PNG and trigger a download.
+  console.log("PurchaseShare invoice:", invoice);
+  useState(() => {
+    console.log("PurchaseShare invoice:", invoice);
+  });
 
 const generateImage = async () => {
   if (!printRef.current) return;

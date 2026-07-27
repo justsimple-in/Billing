@@ -201,6 +201,68 @@ export interface Supplier {
   phone?: string;
 }
 
+export interface SupplierReportItem {
+  itemName: string;
+
+  carats: number;
+
+  weightPerCarat: number;
+
+  pricePerKg: number;
+
+  fare: number;
+
+  amount: number;
+}
+
+export interface SupplierReportReceipt {
+  _id: string;
+
+  date: string;
+
+  total: number;
+
+  items: SupplierReportItem[];
+}
+
+export interface SupplierReportPayment {
+  _id: string;
+
+  date: string;
+
+  amount: number;
+
+  notes: string;
+}
+
+export interface SupplierReportResponse {
+  supplier: {
+    _id: string;
+
+    name: string;
+
+    phone: string;
+
+    address: string;
+  };
+
+  from: string;
+
+  to: string;
+
+  receipts: SupplierReportReceipt[];
+
+  payments: SupplierReportPayment[];
+
+  totals: {
+    receipts: number;
+
+    payments: number;
+
+    outstanding: number;
+  };
+}
+
 export interface PurchaseItem {
   description: string;
 
@@ -226,6 +288,8 @@ export interface PurchaseReceipt {
 
   // supplierId: string;
 
+  businessSlug: string;
+
   version: number;
 
   createdAt: string;
@@ -236,9 +300,9 @@ export interface PurchaseReceipt {
 
   selectedSupplierId: string;
 
-  // balance: number;
+  balance: number;
 
-  // paid: number;
+  paid: number;
 
   fare: boolean;
 
@@ -250,10 +314,10 @@ export interface PurchaseReceipt {
 
   total: number;
 
-  // newBalance: number;
+  newBalance: number;
 }
 
-export interface PurchaseHistoryEntry extends PurchaseReceipt {
+export interface PurchaseHistoryEntry extends PurchaseReceipt  {
   _id: string;
 
   createdAt: string;
@@ -287,3 +351,54 @@ export type PurchaseUnit =
   | "Bag"
   | "Piece"
   | "Kg";
+
+
+  export interface Payment {
+  businessId: string;
+
+  businessSlug: string;
+
+  version: number;
+
+  createdAt: string;
+
+  supplierName: string;
+
+  selectedSupplierId: string;
+
+  paymentDate: string;
+
+  amount: number;
+
+  notes: string;
+
+  previousBalance: number;
+
+  newBalance: number;
+}
+
+export interface PaymentHistoryEntry extends Payment {
+  _id: string;
+}
+
+export interface PaymentDocument extends Payment {
+  _id: string;
+
+  shareId: string;
+
+  paymentGroupId: string;
+
+  version: number;
+
+  active: boolean;
+
+  edited?: boolean;
+
+  previousPaymentId?: string;
+
+  replacedBy?: string;
+
+  history?: PaymentHistoryEntry[];
+
+  updatedAt?: string;
+}
