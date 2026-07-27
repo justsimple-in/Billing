@@ -269,8 +269,7 @@ export const PurchaseLayout = forwardRef<HTMLDivElement, Props>(
                 color: c.green,
               }}
             >
-              <span>Paid</span>
-              <span>{money(invoice.paid)}</span>
+              
               <span>Paid</span>
               <span>{money(invoice.paid)}</span>
             </div>
@@ -284,8 +283,8 @@ export const PurchaseLayout = forwardRef<HTMLDivElement, Props>(
                 fontWeight: 700,
               }}
             >
-              <span>New Balance</span>
-              <span>{money(invoice.newBalance)}</span>
+              {/* <span>New Balance</span>
+              <span>{money(invoice.newBalance)}</span> */}
               <span>New Balance</span>
               <span>{money(invoice.newBalance)}</span>
             </div>
