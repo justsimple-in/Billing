@@ -6,10 +6,12 @@ import { useEffect, useState } from "react";
 
 interface SearchBarProps {
   placeholder?: string;
+  className?: string;
 }
 
 export default function SearchBar({
   placeholder = "Search...",
+  className,
 }: SearchBarProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -32,7 +34,7 @@ export default function SearchBar({
   }, [value]);
 
   return (
-    <div className="relative w-full max-w-md">
+    <div className={`relative w-full ${className ?? "max-w-md"}`}>
       <Search
         className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
         size={18}
