@@ -6,6 +6,7 @@ import { ObjectId } from "mongodb";
 import { getBusiness } from "@/lib/actions/getbusiness";
 import { getClientsCollection } from "@/lib/collections/clients";
 import { getInvoicesCollection } from "@/lib/collections/invoices";
+import { CustomerStatusButton } from "@/components/customer-status-button";
 
 interface Props {
   params: Promise<{
@@ -165,6 +166,12 @@ const bills = await invoices
         >
           Create Bill
         </Link>
+
+        <CustomerStatusButton
+          slug={slug}
+          clientId={client._id.toString()}
+          enabled={client.enabled !== false}
+        />
 
       </div>
 

@@ -23,6 +23,8 @@ export interface Client {
 
   prevBalance: number;
 
+  enabled: boolean;
+
   address?: string;
 
   phone?: string;

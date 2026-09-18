@@ -30,6 +30,7 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
+  const activeOnly = new URL(request.url).searchParams.get("activeOnly") === "true";
 
   const business = await getAuthorizedBusiness(slug);
 
@@ -66,6 +67,7 @@ export async function GET(
   const clients = await collection
     .find({
       businessId: business._id.toString(),
+      ...(activeOnly ? { enabled: { $ne: false } } : {}),
     })
     .sort({
       clientName: 1,
@@ -79,6 +81,7 @@ export async function GET(
       _id: c._id.toString(),
       clientName: c.clientName,
       prevBalance: c.prevBalance,
+      enabled: c.enabled !== false,
     })),
 
     invoiceSettings:
@@ -131,6 +134,7 @@ if (existing) {
       _id: existing._id.toString(),
       clientName: existing.clientName,
       prevBalance: existing.prevBalance ?? 0,
+      enabled: existing.enabled !== false,
     },
   });
 }
@@ -142,6 +146,7 @@ const result = await collection.insertOne({
   normalizedName,
 
   prevBalance,
+  enabled: true,
 
   createdAt: new Date().toISOString(),
 });
@@ -151,6 +156,7 @@ const result = await collection.insertOne({
         _id: result.insertedId.toString(),
         clientName,
         prevBalance,
+        enabled: true,
       },
     })
   } catch (error) {

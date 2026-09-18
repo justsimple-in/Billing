@@ -115,7 +115,7 @@ export function InvoiceForm({ mode, slug, initial, editId }: Props) {
     // loadInvoiceData();
     const fetchClients = async () => {
       try {
-        const res = await fetch(`/${slug}/api/clients`)
+        const res = await fetch(`/${slug}/api/clients?activeOnly=true`)
         
         const data = await res.json()
         // setBillNo(data.invoiceSettings.lastBillNo + 1);

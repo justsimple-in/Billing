@@ -61,14 +61,21 @@ export default async function CustomersPage({ params }: Props) {
           <Link
             key={client._id.toString()}
             href={`/${slug}/customers/${client._id}`}
-            className="flex items-center justify-between border-b p-5 transition hover:bg-neutral-50 last:border-b-0"
+            className={`flex items-center justify-between border-b p-5 transition hover:bg-neutral-50 last:border-b-0 ${
+              client.enabled === false ? "bg-neutral-50" : ""
+            }`}
           >
             <div className="flex items-center gap-3">
-              <User className="text-blue-600" />
+              <User className={client.enabled === false ? "text-neutral-400" : "text-blue-600"} />
 
               <div>
-                <p className="font-medium text-black">
-                  {client.clientName}
+                <p className="flex items-center gap-2 font-medium text-black">
+                  <span>{client.clientName}</span>
+                  {client.enabled === false && (
+                    <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs font-medium text-neutral-600">
+                      Disabled
+                    </span>
+                  )}
                 </p>
 
                 {/* Last bill date will go here later */}
