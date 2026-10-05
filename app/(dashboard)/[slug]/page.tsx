@@ -10,6 +10,7 @@ import {
   Leaf,
   User,
   CreditCard,
+  Calculator,
 } from "lucide-react";
 
 import { getBusiness } from "@/lib/actions/getbusiness";
@@ -153,6 +154,19 @@ const owner = await users.findOne({
 
           <p className="mt-2 text-sm text-black">
             View all invoices.
+          </p>
+        </Link>
+
+        <Link
+          href={`/${slug}/tally`}
+          className="rounded-2xl border bg-white p-6 shadow-sm transition hover:border-blue-500 hover:shadow"
+        >
+          <Calculator className="mb-3 h-8 w-8 text-blue-600" />
+
+          <h3 className="font-semibold text-black">Daily Tally</h3>
+
+          <p className="mt-2 text-sm text-black">
+            Review every bill created for a day.
           </p>
         </Link>
 
